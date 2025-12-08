@@ -3,265 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>熊熊店铺 🐻</title>
+    <title>产品展示页</title>
     <style>
-        /* --- 样式设置 --- */
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; margin: 0; padding: 20px; color: #262626; padding-bottom: 80px; /* 给底部留空间 */ }
-        header { text-align: center; margin-bottom: 20px; }
-        h1 { margin: 0; font-size: 24px; color: #262626; }
-        p.subtitle { color: #8e8e8e; font-size: 14px; margin-top: 5px; }
-
-        .search-wrapper { margin-bottom: 20px; }
-        .search-box { width: 100%; padding: 12px 15px; border: 1px solid #dbdbdb; border-radius: 8px; background-color: #efefef; font-size: 16px; box-sizing: border-box; outline: none; }
-        
-        /* 电脑端并排显示 (minmax 350px) */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
-        
-        .product-card { background: white; border: 1px solid #dbdbdb; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; padding-bottom: 15px; position: relative;}
-        
-        /* 售罄遮罩样式 */
-        .sold-out-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 10;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 24px; font-weight: bold; color: #888; border: 2px solid #ccc;
-            pointer-events: none; /* 允许看到但不能点 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px; /* 增加一点外边距防止手机贴边 */
         }
-        .product-card.is-sold-out { opacity: 0.8; }
-        .product-card.is-sold-out .action-btn { background-color: #ccc; cursor: not-allowed; pointer-events: none; }
 
-        /* 轮播图样式 */
-        .carousel-wrapper { position: relative; width: 100%; height: 300px; background-color: #f0f0f0; }
-        .carousel-scroll { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-        .carousel-img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }
-        .carousel-scroll::-webkit-scrollbar { display: none; }
-        .carousel-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; pointer-events: none; }
-
-        .product-header { padding: 15px; border-bottom: 1px solid #eee; }
-        .product-name { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
-        .product-desc { font-size: 13px; color: #666; }
-
-        .options-container { padding: 10px 15px; display: flex; flex-direction: column; gap: 12px; }
-
-        .option-row { display: flex; align-items: center; border: 1px solid #eee; border-radius: 8px; padding: 10px; background-color: #fcfcfc; }
-        .option-thumb { width: 70px; height: 70px; border-radius: 6px; object-fit: cover; margin-right: 12px; border: 1px solid #eee; }
-        .option-details { flex: 1; }
-        .option-title { font-size: 14px; font-weight: bold; color: #333; }
-        .option-price { color: #E1306C; font-weight: bold; font-size: 15px; margin-top: 2px; }
-        .qty-row { margin-top: 5px; display: flex; align-items: center; font-size: 12px; color: #666;}
-        .qty-input { width: 40px; padding: 2px; text-align: center; border: 1px solid #ccc; border-radius: 4px; margin-left: 5px; }
-
-        .action-btn { padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; margin-left: 10px; white-space: nowrap; }
-        .btn-blue { background-color: #0095f6; color: white; }
-        .btn-orange { background-color: #fca311; color: white; }
-        button:active { opacity: 0.7; }
-
-        /* --- 🆕 底部信息栏样式 --- */
-        footer {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #fff;
-            border-top: 1px solid #eee;
-            border-radius: 12px;
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px; /* 卡片圆角 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
             text-align: center;
-            font-size: 13px;
-            color: #666;
-            line-height: 1.6;
+            max-width: 450px; /*稍微加宽一点 */
+            width: 100%;
         }
-        .footer-title { font-weight: bold; color: #333; margin-bottom: 8px; font-size: 14px; }
+
+        /* --- 修改重点：图片样式 --- */
+        .product-image {
+            width: 100%;       /* 宽度占满卡片 */
+            height: auto;      /* 高度自动，保持原始比例 */
+            max-height: 400px; /* 限制最大高度，防止图片太长 */
+            object-fit: contain; /* 核心：保证图片完整显示，不裁剪 */
+            border-radius: 12px; /* 图片的微圆角，看起来更精致 */
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* 给图片加一点阴影 */
+        }
+
+        h1 {
+            margin: 10px 0;
+            font-size: 26px;
+            color: #1a1a1a;
+        }
+
+        p.description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: left; /* 产品介绍通常左对齐更好看，如果喜欢居中可改为 center */
+            padding: 0 10px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%; /* 按钮也变宽 */
+            padding: 14px 0;
+            text-decoration: none;
+            background-color: #007bff; /* 蓝色主色调 */
+            color: white;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+            box-sizing: border-box; /* 确保内边距不撑大按钮 */
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
         
-        /* 悬浮客服按钮 */
-        .float-btn {
-            position: fixed; bottom: 20px; right: 20px;
-            background-color: #25D366; color: white;
-            padding: 12px 20px; border-radius: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            font-weight: bold; text-decoration: none;
-            z-index: 100; display: flex; align-items: center;
+        .footer {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #aaa;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>熊熊店铺 🐻</h1>
-        <p class="subtitle">100% 正品盲盒 | WhatsApp 快速下单</p>
-    </header>
-    
-    <div class="search-wrapper">
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜索商品...">
+    <div class="container">
+        <img src="image_3b8a52.png" alt="产品图片" class="product-image">
+        
+        <h1>我的精选产品</h1>
+        
+        <p class="description">
+            这是产品的详细介绍区域。<br>
+            这款产品采用了最新的设计理念，图片现在可以完整展示了，不会被裁剪成圆形。<br>
+            你可以在这里写更多关于功能的描述。
+        </p>
+
+        <a href="#" class="btn">了解更多 / 立即购买</a>
+
+        <div class="footer">
+            &copy; 2024 yierbubu1212 Studio
+        </div>
     </div>
 
-    <div id="productContainer" class="product-grid"></div>
-
-    <footer>
-        <div class="footer-title">📦 购买须知</div>
-        <p>
-            <b>付款方式：</b>Touch'n Go / DuitNow / 银行转账<br>
-            <b>发货快递：</b>J&T Express / PosLaju<br>
-            <b>发货时间：</b>下单后 24-48 小时内发货<br>
-            ⚠️ 盲盒商品拆封后不退不换，请见谅。
-        </p>
-        <p style="margin-top:15px; font-size:12px; color:#999;">© 2025 熊熊店铺 Bear Shop</p>
-    </footer>
-
-    <a href="https://wa.me/601110720061" target="_blank" class="float-btn">
-        💬 联系客服
-    </a>
-
-    <script>
-        const myPhoneNumber = "601110720061"; 
-        
-        const products = [
-            // --- 商品 1 ---
-            { 
-                id: 1, 
-                name: "一二布布盲盒第二弹", 
-                desc: "超可爱的布布盲盒，向左滑动查看更多图片！👈", 
-                price: 25, wholeSetPrice: 200, setCount: 10,
-                
-                // 🔴【库存控制】true = 有货, false = 卖完
-                inStock: true, 
-
-                imgProducts: [
-                    "https://i.postimg.cc/HnXMk5MF/di-er-dan-chan-pin1.jpg",
-                    "https://i.postimg.cc/FsbctyNJ/di-er-dan-chan-pin2.jpg",
-                    "https://i.postimg.cc/XvqyytFv/di-er-dan-chan-pin3.jpg"
-                ],
-                imgSingle: "https://i.postimg.cc/521tV8yz/di-er-dan-yi-he.jpg", 
-                imgWhole:  "https://i.postimg.cc/2jMmzhcd/di-er-dan-duan-he.jpg"   
-            },
-
-            // --- 商品 2 ---
-            { 
-                id: 2, 
-                name: "一二布布盲盒 第三弹", 
-                desc: "最新第三弹来啦！造型升级，更可爱！✨", 
-                price: 25, wholeSetPrice: 240, setCount: 12,
-                
-                // 🔴【库存控制】如果你想测试“售罄”效果，把下面这个 true 改成 false
-                inStock: true,
-
-                imgProducts: [
-                    "https://i.postimg.cc/Yq6PYfcx/di-san-dan-chan-pin1.jpg",
-                    "https://i.postimg.cc/MHy90xLz/di-san-dan-chan-pin2.jpg",
-                    "https://i.postimg.cc/g0XqqmXd/di-san-dan-chan-pin3.jpg"
-                ],
-                imgSingle: "https://i.postimg.cc/SRXZnC6n/di-san-dan-dan-he.jpg", 
-                imgWhole:  "https://i.postimg.cc/xdRph0fh/di-san-dan-duan-he.jpg"   
-            }
-        ];
-
-        const container = document.getElementById('productContainer');
-        const searchInput = document.getElementById('searchInput');
-
-        function renderProducts(items) {
-            container.innerHTML = "";
-            if(items.length === 0) {
-                container.innerHTML = "<p style='text-align:center;width:100%'>找不到商品</p>";
-                return;
-            }
-            items.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-
-                // 处理售罄逻辑
-                let soldOutClass = '';
-                let soldOutOverlay = '';
-                if (!product.inStock) {
-                    soldOutClass = 'is-sold-out';
-                    soldOutOverlay = `<div class="sold-out-overlay">❌ 已售罄</div>`;
-                }
-                
-                // 轮播图
-                let slidesHtml = '';
-                if(product.imgProducts && product.imgProducts.length > 0) {
-                    product.imgProducts.forEach(imgUrl => {
-                        slidesHtml += `<img src="${imgUrl}" class="carousel-img" alt="展示图">`;
-                    });
-                } else {
-                    slidesHtml = `<img src="https://via.placeholder.com/600x400" class="carousel-img">`;
-                }
-
-                // 端盒选项
-                let wholeSetOptionHtml = '';
-                if (product.wholeSetPrice && product.setCount) {
-                    wholeSetOptionHtml = `
-                        <div class="option-row">
-                            <img src="${product.imgWhole}" class="option-thumb" alt="端盒图">
-                            <div class="option-details">
-                                <div class="option-title">🔥 购买端盒 (${product.setCount}个)</div>
-                                <div class="option-price">RM ${product.wholeSetPrice}</div>
-                            </div>
-                            <button class="action-btn btn-orange" onclick="orderWholeSet('${product.name}', ${product.wholeSetPrice}, ${product.setCount})">
-                                买端盒
-                            </button>
-                        </div>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <div class="${soldOutClass}" style="height:100%; display:flex; flex-direction:column;">
-                        ${soldOutOverlay}
-                        <div class="carousel-wrapper">
-                            <div class="carousel-scroll">${slidesHtml}</div>
-                            <div class="carousel-badge">左右滑动 ↔</div>
-                        </div>
-                        
-                        <div class="product-header">
-                            <div class="product-name">${product.name}</div>
-                            <div class="product-desc">${product.desc}</div>
-                        </div>
-
-                        <div class="options-container">
-                            <div class="option-row">
-                                <img src="${product.imgSingle}" class="option-thumb" alt="单盒图">
-                                <div class="option-details">
-                                    <div class="option-title">购买散盒 (随机发货)</div>
-                                    <div class="option-price">RM ${product.price} / 个</div>
-                                    <div class="qty-row">
-                                        数量: <input type="number" id="qty-${product.id}" class="qty-input" value="1" min="1">
-                                    </div>
-                                </div>
-                                <button class="action-btn btn-blue" onclick="orderSingle('${product.name}', ${product.price}, ${product.id})">
-                                    买散盒
-                                </button>
-                            </div>
-                            ${wholeSetOptionHtml}
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function orderSingle(name, price, id) {
-            const qtyInput = document.getElementById(`qty-${id}`);
-            const quantity = qtyInput.value;
-            const totalPrice = price * quantity;
-            const message = `你好！我想在熊熊店铺下单 🐻\n\n商品：${name}\n类型：散盒\n数量：${quantity} 个\n总价：RM ${totalPrice}\n\n请问有现货吗？`;
-            sendToWhatsapp(message);
-        }
-
-        function orderWholeSet(name, setPrice, count) {
-            const message = `你好！我想在熊熊店铺下单 🐻\n\n商品：${name}\n类型：🔥 直接端盒 (${count}个)\n端盒总价：RM ${setPrice}\n\n请问有现货吗？`;
-            sendToWhatsapp(message);
-        }
-
-        function sendToWhatsapp(msg) {
-            const encodedMsg = encodeURIComponent(msg);
-            const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${encodedMsg}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        searchInput.addEventListener('input', (e) => {
-            const keyword = e.target.value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
-            renderProducts(filtered);
-        });
-
-        renderProducts(products);
-    </script>
 </body>
 </html>
+
