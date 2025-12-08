@@ -6,7 +6,7 @@
     <title>熊熊店铺 🐻</title>
     <style>
         /* --- 样式设置 --- */
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; margin: 0; padding: 20px; color: #262626; padding-bottom: 80px; /* 给底部留空间 */ }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; margin: 0; padding: 20px; color: #262626; padding-bottom: 80px; }
         header { text-align: center; margin-bottom: 20px; }
         h1 { margin: 0; font-size: 24px; color: #262626; }
         p.subtitle { color: #8e8e8e; font-size: 14px; margin-top: 5px; }
@@ -14,27 +14,38 @@
         .search-wrapper { margin-bottom: 20px; }
         .search-box { width: 100%; padding: 12px 15px; border: 1px solid #dbdbdb; border-radius: 8px; background-color: #efefef; font-size: 16px; box-sizing: border-box; outline: none; }
         
-        /* 电脑端并排显示 (minmax 350px) */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
         
         .product-card { background: white; border: 1px solid #dbdbdb; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; padding-bottom: 15px; position: relative;}
         
-        /* 售罄遮罩样式 */
         .sold-out-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255, 255, 255, 0.7);
             z-index: 10;
             display: flex; justify-content: center; align-items: center;
             font-size: 24px; font-weight: bold; color: #888; border: 2px solid #ccc;
-            pointer-events: none; /* 允许看到但不能点 */
+            pointer-events: none;
         }
         .product-card.is-sold-out { opacity: 0.8; }
         .product-card.is-sold-out .action-btn { background-color: #ccc; cursor: not-allowed; pointer-events: none; }
 
-        /* 轮播图样式 */
-        .carousel-wrapper { position: relative; width: 100%; height: 300px; background-color: #f0f0f0; }
+        /* --- 🖼️ 重点修改区域：轮播图样式 --- */
+        .carousel-wrapper { 
+            position: relative; 
+            width: 100%; 
+            height: 300px; /* 固定高度 */
+            background-color: #ffffff; /* 改成白色背景，这样图片即使没填满也不会显得突兀 */
+        }
         .carousel-scroll { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-        .carousel-img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; }
+        
+        .carousel-img { 
+            flex: 0 0 100%; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; /* ✨ 关键修改：contain 保证图片完整显示，不裁剪！ */
+            scroll-snap-align: start; 
+        }
+        
         .carousel-scroll::-webkit-scrollbar { display: none; }
         .carousel-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; pointer-events: none; }
 
@@ -45,7 +56,10 @@
         .options-container { padding: 10px 15px; display: flex; flex-direction: column; gap: 12px; }
 
         .option-row { display: flex; align-items: center; border: 1px solid #eee; border-radius: 8px; padding: 10px; background-color: #fcfcfc; }
-        .option-thumb { width: 70px; height: 70px; border-radius: 6px; object-fit: cover; margin-right: 12px; border: 1px solid #eee; }
+        
+        /* 小缩略图也改为 contain，防止被切 */
+        .option-thumb { width: 70px; height: 70px; border-radius: 6px; object-fit: contain; margin-right: 12px; border: 1px solid #eee; background: #fff;}
+        
         .option-details { flex: 1; }
         .option-title { font-size: 14px; font-weight: bold; color: #333; }
         .option-price { color: #E1306C; font-weight: bold; font-size: 15px; margin-top: 2px; }
@@ -57,21 +71,13 @@
         .btn-orange { background-color: #fca311; color: white; }
         button:active { opacity: 0.7; }
 
-        /* --- 🆕 底部信息栏样式 --- */
         footer {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #fff;
-            border-top: 1px solid #eee;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 13px;
-            color: #666;
-            line-height: 1.6;
+            margin-top: 40px; padding: 20px; background-color: #fff;
+            border-top: 1px solid #eee; border-radius: 12px;
+            text-align: center; font-size: 13px; color: #666; line-height: 1.6;
         }
         .footer-title { font-weight: bold; color: #333; margin-bottom: 8px; font-size: 14px; }
         
-        /* 悬浮客服按钮 */
         .float-btn {
             position: fixed; bottom: 20px; right: 20px;
             background-color: #25D366; color: white;
@@ -120,8 +126,6 @@
                 name: "一二布布盲盒第二弹", 
                 desc: "超可爱的布布盲盒，向左滑动查看更多图片！👈", 
                 price: 25, wholeSetPrice: 200, setCount: 10,
-                
-                // 🔴【库存控制】true = 有货, false = 卖完
                 inStock: true, 
 
                 imgProducts: [
@@ -130,7 +134,7 @@
                     "https://i.postimg.cc/XvqyytFv/di-er-dan-chan-pin3.jpg"
                 ],
                 imgSingle: "https://i.postimg.cc/521tV8yz/di-er-dan-yi-he.jpg", 
-                imgWhole:  "https://i.postimg.cc/2jMmzhcd/di-er-dan-duan-he.jpg"   
+                imgWhole:  "https://i.postimg.cc/2jMmzhcd/di-er-dan-duan-he.jpg"    
             },
 
             // --- 商品 2 ---
@@ -139,8 +143,6 @@
                 name: "一二布布盲盒 第三弹", 
                 desc: "最新第三弹来啦！造型升级，更可爱！✨", 
                 price: 25, wholeSetPrice: 240, setCount: 12,
-                
-                // 🔴【库存控制】如果你想测试“售罄”效果，把下面这个 true 改成 false
                 inStock: true,
 
                 imgProducts: [
@@ -149,7 +151,7 @@
                     "https://i.postimg.cc/g0XqqmXd/di-san-dan-chan-pin3.jpg"
                 ],
                 imgSingle: "https://i.postimg.cc/SRXZnC6n/di-san-dan-dan-he.jpg", 
-                imgWhole:  "https://i.postimg.cc/xdRph0fh/di-san-dan-duan-he.jpg"   
+                imgWhole:  "https://i.postimg.cc/xdRph0fh/di-san-dan-duan-he.jpg"    
             }
         ];
 
@@ -166,7 +168,6 @@
                 const card = document.createElement('div');
                 card.className = 'product-card';
 
-                // 处理售罄逻辑
                 let soldOutClass = '';
                 let soldOutOverlay = '';
                 if (!product.inStock) {
@@ -174,7 +175,6 @@
                     soldOutOverlay = `<div class="sold-out-overlay">❌ 已售罄</div>`;
                 }
                 
-                // 轮播图
                 let slidesHtml = '';
                 if(product.imgProducts && product.imgProducts.length > 0) {
                     product.imgProducts.forEach(imgUrl => {
@@ -184,7 +184,6 @@
                     slidesHtml = `<img src="https://via.placeholder.com/600x400" class="carousel-img">`;
                 }
 
-                // 端盒选项
                 let wholeSetOptionHtml = '';
                 if (product.wholeSetPrice && product.setCount) {
                     wholeSetOptionHtml = `
@@ -265,5 +264,6 @@
     </script>
 </body>
 </html>
+
 
 
