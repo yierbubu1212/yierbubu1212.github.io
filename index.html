@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>熊熊店铺 🐻</title>
+    <title>熊熊店铺 🐻 Bear Shop</title>
     <style>
         /* --- 样式设置 --- */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; margin: 0; padding: 20px; color: #262626; padding-bottom: 80px; }
@@ -29,12 +29,12 @@
         .product-card.is-sold-out { opacity: 0.8; }
         .product-card.is-sold-out .action-btn { background-color: #ccc; cursor: not-allowed; pointer-events: none; }
 
-        /* --- 🖼️ 重点修改区域：轮播图样式 --- */
+        /* --- 轮播图样式 --- */
         .carousel-wrapper { 
             position: relative; 
             width: 100%; 
-            height: 300px; /* 固定高度 */
-            background-color: #ffffff; /* 改成白色背景，这样图片即使没填满也不会显得突兀 */
+            height: 300px; 
+            background-color: #ffffff; 
         }
         .carousel-scroll { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         
@@ -42,7 +42,7 @@
             flex: 0 0 100%; 
             width: 100%; 
             height: 100%; 
-            object-fit: contain; /* ✨ 关键修改：contain 保证图片完整显示，不裁剪！ */
+            object-fit: contain; 
             scroll-snap-align: start; 
         }
         
@@ -56,10 +56,7 @@
         .options-container { padding: 10px 15px; display: flex; flex-direction: column; gap: 12px; }
 
         .option-row { display: flex; align-items: center; border: 1px solid #eee; border-radius: 8px; padding: 10px; background-color: #fcfcfc; }
-        
-        /* 小缩略图也改为 contain，防止被切 */
         .option-thumb { width: 70px; height: 70px; border-radius: 6px; object-fit: contain; margin-right: 12px; border: 1px solid #eee; background: #fff;}
-        
         .option-details { flex: 1; }
         .option-title { font-size: 14px; font-weight: bold; color: #333; }
         .option-price { color: #E1306C; font-weight: bold; font-size: 15px; margin-top: 2px; }
@@ -91,29 +88,29 @@
 <body>
 
     <header>
-        <h1>熊熊店铺 🐻</h1>
-        <p class="subtitle">100% 正品盲盒 | WhatsApp 快速下单</p>
+        <h1>熊熊店铺 🐻 Bear Shop</h1>
+        <p class="subtitle">100% 正品盲盒 · Authentic Blind Boxes | WhatsApp Order</p>
     </header>
     
     <div class="search-wrapper">
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜索商品...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜索商品 / Search Products...">
     </div>
 
     <div id="productContainer" class="product-grid"></div>
 
     <footer>
-        <div class="footer-title">📦 购买须知</div>
+        <div class="footer-title">📦 购买须知 / Purchase Info</div>
         <p>
-            <b>付款方式：</b>Touch'n Go / DuitNow / 银行转账<br>
-            <b>发货快递：</b>J&T Express / PosLaju<br>
-            <b>发货时间：</b>下单后 24-48 小时内发货<br>
-            ⚠️ 盲盒商品拆封后不退不换，请见谅。
+            <b>付款 (Payment)：</b>Touch'n Go / DuitNow / Bank Transfer<br>
+            <b>快递 (Shipping)：</b>J&T Express / PosLaju<br>
+            <b>发货 (Time)：</b>下单后 24-48 小时 (Hours)<br>
+            ⚠️ 盲盒拆封不退换 / No return after opening.
         </p>
         <p style="margin-top:15px; font-size:12px; color:#999;">© 2025 熊熊店铺 Bear Shop</p>
     </footer>
 
     <a href="https://wa.me/601110720061" target="_blank" class="float-btn">
-        💬 联系客服
+        💬 客服 / Chat
     </a>
 
     <script>
@@ -123,8 +120,8 @@
             // --- 商品 1 ---
             { 
                 id: 1, 
-                name: "一二布布盲盒第二弹", 
-                desc: "超可爱的布布盲盒，向左滑动查看更多图片！👈", 
+                name: "一二布布 第二系列 (Bubu Dudu Series 2)", 
+                desc: "超可爱布布盲盒！Super cute Bubu blind box! 👈", 
                 price: 25, wholeSetPrice: 200, setCount: 10,
                 inStock: true, 
 
@@ -140,8 +137,8 @@
             // --- 商品 2 ---
             { 
                 id: 2, 
-                name: "一二布布盲盒 第三弹", 
-                desc: "最新第三弹来啦！造型升级，更可爱！✨", 
+                name: "一二布布 第三系列 (Bubu Dudu Series 3)", 
+                desc: "最新第三弹！New Series 3 released! ✨", 
                 price: 25, wholeSetPrice: 240, setCount: 12,
                 inStock: true,
 
@@ -161,7 +158,7 @@
         function renderProducts(items) {
             container.innerHTML = "";
             if(items.length === 0) {
-                container.innerHTML = "<p style='text-align:center;width:100%'>找不到商品</p>";
+                container.innerHTML = "<p style='text-align:center;width:100%'>找不到商品 / No products found</p>";
                 return;
             }
             items.forEach(product => {
@@ -172,13 +169,13 @@
                 let soldOutOverlay = '';
                 if (!product.inStock) {
                     soldOutClass = 'is-sold-out';
-                    soldOutOverlay = `<div class="sold-out-overlay">❌ 已售罄</div>`;
+                    soldOutOverlay = `<div class="sold-out-overlay">❌ 已售罄 Sold Out</div>`;
                 }
                 
                 let slidesHtml = '';
                 if(product.imgProducts && product.imgProducts.length > 0) {
                     product.imgProducts.forEach(imgUrl => {
-                        slidesHtml += `<img src="${imgUrl}" class="carousel-img" alt="展示图">`;
+                        slidesHtml += `<img src="${imgUrl}" class="carousel-img" alt="Product Image">`;
                     });
                 } else {
                     slidesHtml = `<img src="https://via.placeholder.com/600x400" class="carousel-img">`;
@@ -188,13 +185,13 @@
                 if (product.wholeSetPrice && product.setCount) {
                     wholeSetOptionHtml = `
                         <div class="option-row">
-                            <img src="${product.imgWhole}" class="option-thumb" alt="端盒图">
+                            <img src="${product.imgWhole}" class="option-thumb" alt="Whole Set">
                             <div class="option-details">
-                                <div class="option-title">🔥 购买端盒 (${product.setCount}个)</div>
+                                <div class="option-title">🔥 端盒 Whole Set (${product.setCount} pcs)</div>
                                 <div class="option-price">RM ${product.wholeSetPrice}</div>
                             </div>
                             <button class="action-btn btn-orange" onclick="orderWholeSet('${product.name}', ${product.wholeSetPrice}, ${product.setCount})">
-                                买端盒
+                                端盒 / Set
                             </button>
                         </div>
                     `;
@@ -205,7 +202,7 @@
                         ${soldOutOverlay}
                         <div class="carousel-wrapper">
                             <div class="carousel-scroll">${slidesHtml}</div>
-                            <div class="carousel-badge">左右滑动 ↔</div>
+                            <div class="carousel-badge">左右滑动 ↔ Swipe</div>
                         </div>
                         
                         <div class="product-header">
@@ -215,16 +212,16 @@
 
                         <div class="options-container">
                             <div class="option-row">
-                                <img src="${product.imgSingle}" class="option-thumb" alt="单盒图">
+                                <img src="${product.imgSingle}" class="option-thumb" alt="Single Box">
                                 <div class="option-details">
-                                    <div class="option-title">购买散盒 (随机发货)</div>
-                                    <div class="option-price">RM ${product.price} / 个</div>
+                                    <div class="option-title">散盒 Single Box (Random)</div>
+                                    <div class="option-price">RM ${product.price} / each</div>
                                     <div class="qty-row">
-                                        数量: <input type="number" id="qty-${product.id}" class="qty-input" value="1" min="1">
+                                        Qty: <input type="number" id="qty-${product.id}" class="qty-input" value="1" min="1">
                                     </div>
                                 </div>
                                 <button class="action-btn btn-blue" onclick="orderSingle('${product.name}', ${product.price}, ${product.id})">
-                                    买散盒
+                                    散盒 / Single
                                 </button>
                             </div>
                             ${wholeSetOptionHtml}
@@ -239,12 +236,12 @@
             const qtyInput = document.getElementById(`qty-${id}`);
             const quantity = qtyInput.value;
             const totalPrice = price * quantity;
-            const message = `你好！我想在熊熊店铺下单 🐻\n\n商品：${name}\n类型：散盒\n数量：${quantity} 个\n总价：RM ${totalPrice}\n\n请问有现货吗？`;
+            const message = `Hi Bear Shop 🐻! \nI want to order:\n\nItem: ${name}\nType: Single Box (散盒)\nQty: ${quantity}\nTotal: RM ${totalPrice}\n\nIs this available? (请问有货吗)`;
             sendToWhatsapp(message);
         }
 
         function orderWholeSet(name, setPrice, count) {
-            const message = `你好！我想在熊熊店铺下单 🐻\n\n商品：${name}\n类型：🔥 直接端盒 (${count}个)\n端盒总价：RM ${setPrice}\n\n请问有现货吗？`;
+            const message = `Hi Bear Shop 🐻! \nI want to order:\n\nItem: ${name}\nType: 🔥 Whole Set (端盒 ${count}pcs)\nPrice: RM ${setPrice}\n\nIs this available? (请问有货吗)`;
             sendToWhatsapp(message);
         }
 
@@ -264,6 +261,7 @@
     </script>
 </body>
 </html>
+
 
 
 
