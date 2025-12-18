@@ -3,85 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubu Dudu Store</title>
+    <title>Bubu Dudu Store 一二布布商店</title>
     <style>
-        /* --- 全局样式：更干净的背景 --- */
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #f9f9f9; 
-            margin: 0; 
-            padding: 20px; 
-            color: #333; 
-            padding-bottom: 80px; 
-        }
+        /* --- 样式设置 --- */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; margin: 0; padding: 20px; color: #262626; padding-bottom: 80px; }
         
-        /* --- 顶部品牌区 --- */
         header { 
             text-align: center; 
-            margin-bottom: 35px; 
-            padding-top: 20px;
+            margin-bottom: 30px; 
+            padding-top: 10px;
         }
         
-        /* Logo 样式：圆形、阴影、白边 */
         .store-logo {
-            width: 100px; 
-            height: 100px;
+            width: 90px; 
+            height: 90px;
             border-radius: 50%; 
             object-fit: cover;
-            border: 4px solid #ffffff; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
-            margin-bottom: 15px; 
-            transition: transform 0.3s ease;
-        }
-        
-        .store-logo:hover {
-            transform: scale(1.05); /* 鼠标放上去会轻微放大 */
+            border: 4px solid #fff; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+            margin-bottom: 12px; 
         }
 
-        /* 品牌大标题 */
-        h1 { 
-            margin: 0; 
-            font-size: 26px; 
-            color: #222; 
-            font-weight: 800; 
-            letter-spacing: -0.5px; 
-        }
-        
-        p.subtitle { 
-            color: #666; 
-            font-size: 13px; 
-            margin-top: 8px; 
-            font-weight: 500;
-        }
+        h1 { margin: 0; font-size: 22px; color: #262626; font-weight: 800; letter-spacing: -0.5px; }
+        p.subtitle { color: #8e8e8e; font-size: 13px; margin-top: 6px; }
 
-        /* --- 搜索框 --- */
-        .search-wrapper { margin-bottom: 25px; }
-        .search-box { 
-            width: 100%; 
-            padding: 14px 20px; 
-            border: 1px solid #eee; 
-            border-radius: 50px; /* 圆角搜索框 */
-            background-color: #fff; 
-            font-size: 16px; 
-            box-sizing: border-box; 
-            outline: none; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
+        .search-wrapper { margin-bottom: 20px; }
+        .search-box { width: 100%; padding: 12px 15px; border: 1px solid #dbdbdb; border-radius: 8px; background-color: #efefef; font-size: 16px; box-sizing: border-box; outline: none; }
         
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
         
-        /* --- 商品卡片 --- */
-        .product-card { 
-            background: white; 
-            border: none; 
-            border-radius: 16px; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            padding-bottom: 20px; 
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* 更柔和的阴影 */
-        }
+        .product-card { background: white; border: 1px solid #dbdbdb; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; padding-bottom: 15px; position: relative;}
         
         .sold-out-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -97,7 +48,7 @@
         .carousel-wrapper { 
             position: relative; 
             width: 100%; 
-            height: 320px; /* 稍微加高一点 */
+            height: 300px; 
             background-color: #ffffff; 
         }
         .carousel-scroll { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
@@ -111,84 +62,116 @@
         }
         
         .carousel-scroll::-webkit-scrollbar { display: none; }
-        .carousel-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px; pointer-events: none; }
+        .carousel-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; pointer-events: none; }
 
-        .product-header { padding: 18px; border-bottom: 1px solid #f5f5f5; }
-        .product-name { font-weight: bold; font-size: 19px; margin-bottom: 6px; color: #111; }
-        .product-desc { font-size: 13px; color: #666; white-space: pre-line; line-height: 1.5; }
+        .product-header { padding: 15px; border-bottom: 1px solid #eee; }
+        .product-name { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
+        .product-desc { font-size: 13px; color: #666; white-space: pre-line; }
 
-        .options-container { padding: 12px 18px; display: flex; flex-direction: column; gap: 15px; }
+        .options-container { padding: 10px 15px; display: flex; flex-direction: column; gap: 12px; }
 
-        .option-row { display: flex; align-items: center; border: 1px solid #f0f0f0; border-radius: 10px; padding: 10px; background-color: #fafafa; }
-        .option-thumb { width: 70px; height: 70px; border-radius: 8px; object-fit: contain; margin-right: 12px; border: 1px solid #eee; background: #fff;}
+        .option-row { display: flex; align-items: center; border: 1px solid #eee; border-radius: 8px; padding: 10px; background-color: #fcfcfc; }
+        .option-thumb { width: 70px; height: 70px; border-radius: 6px; object-fit: contain; margin-right: 12px; border: 1px solid #eee; background: #fff;}
         .option-details { flex: 1; }
         .option-title { font-size: 14px; font-weight: bold; color: #333; }
-        .option-price { color: #E1306C; font-weight: bold; font-size: 15px; margin-top: 3px; }
+        .option-price { color: #E1306C; font-weight: bold; font-size: 15px; margin-top: 2px; }
         .qty-row { margin-top: 5px; display: flex; align-items: center; font-size: 12px; color: #666;}
-        .qty-input { width: 45px; padding: 3px; text-align: center; border: 1px solid #ddd; border-radius: 5px; margin-left: 5px; }
+        .qty-input { width: 40px; padding: 2px; text-align: center; border: 1px solid #ccc; border-radius: 4px; margin-left: 5px; }
 
-        .action-btn { padding: 10px 15px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-left: 10px; white-space: nowrap; transition: 0.2s; }
+        .action-btn { padding: 8px 12px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; margin-left: 10px; white-space: nowrap; }
         .btn-blue { background-color: #0095f6; color: white; }
         .btn-orange { background-color: #fca311; color: white; }
         .btn-purple { background-color: #8338ec; color: white; }
-        .action-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:active { opacity: 0.7; }
 
         footer {
-            margin-top: 50px; padding: 30px 20px; background-color: #fff;
-            border-top: 1px solid #eee; border-radius: 20px;
-            text-align: center; font-size: 13px; color: #888; line-height: 1.8;
+            margin-top: 40px; padding: 20px; background-color: #fff;
+            border-top: 1px solid #eee; border-radius: 12px;
+            text-align: center; font-size: 13px; color: #666; line-height: 1.6;
         }
-        .footer-title { font-weight: bold; color: #333; margin-bottom: 10px; font-size: 15px; }
+        .footer-title { font-weight: bold; color: #333; margin-bottom: 8px; font-size: 14px; }
         
-        .float-btn {
-            position: fixed; bottom: 25px; right: 25px;
-            background-color: #25D366; color: white;
-            padding: 14px 24px; border-radius: 50px;
-            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
-            font-weight: bold; text-decoration: none;
-            z-index: 100; display: flex; align-items: center; gap: 8px;
-            transition: 0.2s;
+        /* 社交媒体图标样式 */
+        .social-section { margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
+        .social-label { font-weight: bold; margin-bottom: 15px; display: block; color: #333; font-size: 14px; }
+        .social-icons { display: flex; justify-content: center; gap: 25px; align-items: center; }
+        
+        .social-link { 
+            display: inline-block; 
+            transition: transform 0.2s ease;
         }
-        .float-btn:hover { transform: scale(1.05); }
+        .social-link img {
+            width: 40px; 
+            height: 40px; 
+            object-fit: contain; 
+            border-radius: 8px; 
+            display: block;
+        }
+        .social-link:hover { transform: translateY(-3px) scale(1.1); } 
+
+        .float-btn {
+            position: fixed; bottom: 20px; right: 20px;
+            background-color: #25D366; color: white;
+            padding: 12px 20px; border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-weight: bold; text-decoration: none;
+            z-index: 100; display: flex; align-items: center;
+        }
     </style>
 </head>
 <body>
 
     <header>
         <img src="https://i.postimg.cc/pXqynd9c/Bubu-dudu-shop-logo.jpg" alt="Bubu Dudu Store Logo" class="store-logo">
-        <h1>Bubu Dudu Store</h1>
-        <p class="subtitle">100% Authentic Blind Boxes · Custom Video · Global Delivery</p>
+        <h1>Bubu Dudu Store 一二布布商店</h1>
+        <p class="subtitle">100% Authentic Blind Boxes · Custom Video | WhatsApp Order</p>
     </header>
     
     <div class="search-wrapper">
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search Bubu Dudu...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search Products...">
     </div>
 
     <div id="productContainer" class="product-grid"></div>
 
     <footer>
-        <div class="footer-title">📦 Info & Policy</div>
+        <div class="footer-title">📦 Purchase Info (购买须知)</div>
         <p>
-            <b>Payment:</b> Touch'n Go / DuitNow / Bank Transfer<br>
-            <b>Shipping:</b> J&T Express / PosLaju / Global Delivery<br>
+            <b>Shipping (Blind Box):</b> J&T Express / PosLaju<br>
+            <b>Custom Video:</b> 🌍 Global Delivery (Online)<br>
             ⚠️ No return after opening (拆封不退换)
         </p>
-        <p style="margin-top:20px; font-size:12px; color:#aaa;">© 2025 bubududustore</p>
+
+        <div class="social-section">
+            <span class="social-label">Follow Us 关注我们</span>
+            <div class="social-icons">
+                <a href="https://xhslink.com/m/5bQZ298AzfF" target="_blank" class="social-link">
+                    <img src="https://i.postimg.cc/Jz7q8tXg/Xiaohongshu-LOGO.png" alt="Xiaohongshu">
+                </a>
+                <a href="https://www.instagram.com/bubu_dudu_store?igsh=cWt3enZpZGszNWJx" target="_blank" class="social-link">
+                    <img src="https://i.postimg.cc/9fKtypkw/Instagram-icon.png" alt="Instagram">
+                </a>
+                <a href="https://www.tiktok.com/@yierlovebubu1212?_r=1&_t=ZS-92KcH6zZuSd" target="_blank" class="social-link">
+                    <img src="https://i.postimg.cc/76z19zvQ/tiktok-app-icon-social-media-logo-277909-647.avif" alt="TikTok">
+                </a>
+            </div>
+        </div>
+
+        <p style="margin-top:20px; font-size:12px; color:#999;">© 2025 Bubu Dudu Store 一二布布商店</p>
     </footer>
 
-    <a href="https://wa.me/601110720061" target="_blank" class="float-btn">
-        <span>💬 Chat on WhatsApp</span>
+    <a href="https://wa.me/601110720061?text=Hi%20Bubu%20Dudu%20Store" target="_blank" class="float-btn">
+        💬 Chat
     </a>
 
     <script>
         const myPhoneNumber = "601110720061"; 
         
         const products = [
-            // --- ✨ [TOP] Custom Video Service ---
+            // --- 定制视频 ---
             {
                 id: 'custom-video',
                 name: "Custom Bubu Dudu Video (专属定制视频)",
-                desc: "We specialize in creating the most heartwarming and unique custom Bubu & Dudu videos for you. \n\n✨ Anniversaries, Birthdays, Proposals, Life Stories.\n✨ 全球交付 / Global Delivery", 
+                desc: "We create the most heartwarming custom videos for you! \nAnniversaries, Birthdays, Proposals, Life Stories.\n我们为您打造最治愈的专属定制视频！\n\n🌍 **Global Delivery / 全球交付**", 
                 price: 0, 
                 isCustom: true,
                 inStock: true,
@@ -199,11 +182,11 @@
                 imgWhole: "" 
             },
 
-            // --- Product 1 ---
+            // --- 商品 1 ---
             { 
                 id: 1, 
                 name: "Bubu Dudu Series 2 (一二布布 第二弹)", 
-                desc: "Super cute Bubu blind box! \nSwipe left for more 👉", 
+                desc: "Super cute Bubu blind box! 向左滑动查看更多图片 👈", 
                 price: 25, wholeSetPrice: 200, setCount: 10,
                 inStock: true, 
                 isCustom: false,
@@ -217,11 +200,11 @@
                 imgWhole:  "https://i.postimg.cc/2jMmzhcd/di-er-dan-duan-he.jpg"    
             },
 
-            // --- Product 2 ---
+            // --- 商品 2 ---
             { 
                 id: 2, 
                 name: "Bubu Dudu Series 3 (一二布布 第三弹)", 
-                desc: "New Series 3 released! \nCheck out the new designs ✨", 
+                desc: "New Series 3 released! 最新第三弹 ✨", 
                 price: 25, wholeSetPrice: 240, setCount: 12,
                 inStock: true,
                 isCustom: false,
@@ -242,7 +225,7 @@
         function renderProducts(items) {
             container.innerHTML = "";
             if(items.length === 0) {
-                container.innerHTML = "<p style='text-align:center;width:100%;color:#888;margin-top:20px;'>No products found</p>";
+                container.innerHTML = "<p style='text-align:center;width:100%'>No products found</p>";
                 return;
             }
             items.forEach(product => {
@@ -330,19 +313,22 @@
             let message = "";
             
             if (isCustom) {
-                message = `Hi bubududustore! 🐻\nI'm interested in the Custom Video:\n\n🎥 **${name}**\n\nI'd like to get a quote. \nMy Request (Occasion): \n(e.g. Birthday, Anniversary...)`;
+                // ✨ 1. 定制视频: Hi Bubu Dudu Store, Custom Video
+                message = `Hi Bubu Dudu Store, Custom Video\n\nI am interested in:\n🎥 **${name}**\n\nI would like to request a quote for a custom video.\n\nMy Request (Type/Occasion): \n(e.g., Birthday, Anniversary...)`;
             } else {
                 const qtyInput = document.getElementById(`qty-${id}`);
                 const quantity = qtyInput.value;
                 const totalPrice = price * quantity;
-                message = `Hi bubududustore! \nI want to order:\n\nItem: ${name}\nType: Single Box\nQty: ${quantity}\nTotal: RM ${totalPrice}\n\nIs this available?`;
+                // ✨ 2. 盲盒: Hi Bubu Dudu Store, Bubu Dudu Blind Box
+                message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box\n\nI want to order:\nItem: ${name}\nType: Single Box\nQty: ${quantity}\nTotal: RM ${totalPrice}\n\nIs this available?`;
             }
             
             sendToWhatsapp(message);
         }
 
         function orderWholeSet(name, setPrice, count) {
-            const message = `Hi bubududustore! \nI want to order:\n\nItem: ${name}\nType: 🔥 Whole Set (${count}pcs)\nPrice: RM ${setPrice}\n\nIs this available?`;
+            // ✨ 2. 盲盒: Hi Bubu Dudu Store, Bubu Dudu Blind Box
+            const message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box\n\nI want to order:\nItem: ${name}\nType: 🔥 Whole Set (${count}pcs)\nPrice: RM ${setPrice}\n\nIs this available?`;
             sendToWhatsapp(message);
         }
 
@@ -362,7 +348,6 @@
     </script>
 </body>
 </html>
-
 
 
 
