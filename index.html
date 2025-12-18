@@ -112,10 +112,18 @@
         .float-btn {
             position: fixed; bottom: 20px; right: 20px;
             background-color: #25D366; color: white;
-            padding: 12px 20px; border-radius: 30px;
+            padding: 10px 20px; /* 稍微调整padding */
+            border-radius: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             font-weight: bold; text-decoration: none;
             z-index: 100; display: flex; align-items: center;
+            gap: 8px; /* 图标和文字间距 */
+        }
+        /* 新增：WhatsApp Logo 样式 */
+        .wa-logo-img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -160,7 +168,8 @@
     </footer>
 
     <a href="https://wa.me/601110720061?text=Hi%20Bubu%20Dudu%20Store" target="_blank" class="float-btn">
-        💬 Chat
+        <img src="https://i.postimg.cc/YCkWKP5R/Whats-App-svg.webp" class="wa-logo-img" alt="WhatsApp">
+        Chat
     </a>
 
     <script>
@@ -314,21 +323,21 @@
             
             if (isCustom) {
                 // ✨ 1. 定制视频: Hi Bubu Dudu Store, Custom Video
-                message = `Hi Bubu Dudu Store, Custom Video\n\nI am interested in:\n🎥 **${name}**\n\nI would like to request a quote for a custom video.\n\nMy Request (Type/Occasion): \n(e.g., Birthday, Anniversary...)`;
+                message = `Hi Bubu Dudu Store, Custom Video! 🐻\n\nI am interested in:\n🎥 **${name}**\n\nI would like to request a quote for a custom video.\n\nMy Request (Type/Occasion): \n(e.g., Birthday, Anniversary...)`;
             } else {
                 const qtyInput = document.getElementById(`qty-${id}`);
                 const quantity = qtyInput.value;
                 const totalPrice = price * quantity;
-                // ✨ 2. 盲盒: Hi Bubu Dudu Store, Bubu Dudu Blind Box
-                message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box\n\nI want to order:\nItem: ${name}\nType: Single Box\nQty: ${quantity}\nTotal: RM ${totalPrice}\n\nIs this available?`;
+                // ✨ 2. 盲盒产品: Hi Bubu Dudu Store, Bubu Dudu Blind Box
+                message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box! \n\nI want to order:\nItem: ${name}\nType: Single Box\nQty: ${quantity}\nTotal: RM ${totalPrice}\n\nIs this available?`;
             }
             
             sendToWhatsapp(message);
         }
 
         function orderWholeSet(name, setPrice, count) {
-            // ✨ 2. 盲盒: Hi Bubu Dudu Store, Bubu Dudu Blind Box
-            const message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box\n\nI want to order:\nItem: ${name}\nType: 🔥 Whole Set (${count}pcs)\nPrice: RM ${setPrice}\n\nIs this available?`;
+            // ✨ 2. 盲盒产品: Hi Bubu Dudu Store, Bubu Dudu Blind Box
+            const message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box! \n\nI want to order:\nItem: ${name}\nType: 🔥 Whole Set (${count}pcs)\nPrice: RM ${setPrice}\n\nIs this available?`;
             sendToWhatsapp(message);
         }
 
@@ -348,7 +357,6 @@
     </script>
 </body>
 </html>
-
 
 
 
