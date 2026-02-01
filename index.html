@@ -4,28 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bubu Dudu Store 一二布布商店</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/XqPRJTcj/Whats-App-Image-2026-01-11-at-6-52-12-PM-2-removebg-preview.png">
+
     <style>
-        /* --- 样式设置 --- */
+        /* --- 基础样式 --- */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; margin: 0; padding: 20px; color: #262626; padding-bottom: 80px; }
         
-        header { 
-            text-align: center; 
-            margin-bottom: 30px; 
-            padding-top: 10px;
-        }
-        
-        .store-logo {
-            width: 90px; 
-            height: 90px;
-            border-radius: 50%; 
-            object-fit: cover;
-            border: 4px solid #fff; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-            margin-bottom: 12px; 
-        }
-
+        header { text-align: center; margin-bottom: 20px; padding-top: 10px; }
+        .store-logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 12px; }
         h1 { margin: 0; font-size: 22px; color: #262626; font-weight: 800; letter-spacing: -0.5px; }
         p.subtitle { color: #8e8e8e; font-size: 13px; margin-top: 6px; }
+
+        /* 货币选择器样式 */
+        .currency-wrapper { text-align: center; margin-bottom: 20px; }
+        .currency-select {
+            padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd;
+            background-color: #fff; font-size: 14px; font-weight: bold; color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); outline: none; cursor: pointer;
+        }
 
         .search-wrapper { margin-bottom: 20px; }
         .search-box { width: 100%; padding: 12px 15px; border: 1px solid #dbdbdb; border-radius: 8px; background-color: #efefef; font-size: 16px; box-sizing: border-box; outline: none; }
@@ -34,33 +30,10 @@
         
         .product-card { background: white; border: 1px solid #dbdbdb; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; padding-bottom: 15px; position: relative;}
         
-        .sold-out-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 10;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 24px; font-weight: bold; color: #888; border: 2px solid #ccc;
-            pointer-events: none;
-        }
-        .product-card.is-sold-out { opacity: 0.8; }
-        .product-card.is-sold-out .action-btn { background-color: #ccc; cursor: not-allowed; pointer-events: none; }
-
-        .carousel-wrapper { 
-            position: relative; 
-            width: 100%; 
-            height: 300px; 
-            background-color: #ffffff; 
-        }
+        /* 轮播图 */
+        .carousel-wrapper { position: relative; width: 100%; height: 300px; background-color: #ffffff; }
         .carousel-scroll { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-        
-        .carousel-img { 
-            flex: 0 0 100%; 
-            width: 100%; 
-            height: 100%; 
-            object-fit: contain; 
-            scroll-snap-align: start; 
-        }
-        
+        .carousel-img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; scroll-snap-align: start; }
         .carousel-scroll::-webkit-scrollbar { display: none; }
         .carousel-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; pointer-events: none; }
 
@@ -69,12 +42,12 @@
         .product-desc { font-size: 13px; color: #666; white-space: pre-line; }
 
         .options-container { padding: 10px 15px; display: flex; flex-direction: column; gap: 12px; }
-
         .option-row { display: flex; align-items: center; border: 1px solid #eee; border-radius: 8px; padding: 10px; background-color: #fcfcfc; }
         .option-thumb { width: 70px; height: 70px; border-radius: 6px; object-fit: contain; margin-right: 12px; border: 1px solid #eee; background: #fff;}
         .option-details { flex: 1; }
         .option-title { font-size: 14px; font-weight: bold; color: #333; }
         .option-price { color: #E1306C; font-weight: bold; font-size: 15px; margin-top: 2px; }
+        
         .qty-row { margin-top: 5px; display: flex; align-items: center; font-size: 12px; color: #666;}
         .qty-input { width: 40px; padding: 2px; text-align: center; border: 1px solid #ccc; border-radius: 4px; margin-left: 5px; }
 
@@ -84,47 +57,47 @@
         .btn-purple { background-color: #8338ec; color: white; }
         button:active { opacity: 0.7; }
 
-        footer {
-            margin-top: 40px; padding: 20px; background-color: #fff;
-            border-top: 1px solid #eee; border-radius: 12px;
-            text-align: center; font-size: 13px; color: #666; line-height: 1.6;
+        /* --- 弹窗样式 --- */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;
         }
-        .footer-title { font-weight: bold; color: #333; margin-bottom: 8px; font-size: 14px; }
+        .modal-content {
+            background-color: #fff; padding: 20px; border-radius: 12px;
+            width: 85%; max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: left; position: relative;
+            max-height: 90vh; overflow-y: auto;
+        }
+        .modal-header { font-size: 18px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #999; }
         
-        /* 社交媒体图标样式 */
-        .social-section { margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
-        .social-label { font-weight: bold; margin-bottom: 15px; display: block; color: #333; font-size: 14px; }
-        .social-icons { display: flex; justify-content: center; gap: 25px; align-items: center; }
-        
-        .social-link { 
-            display: inline-block; 
-            transition: transform 0.2s ease;
-        }
-        .social-link img {
-            width: 40px; 
-            height: 40px; 
-            object-fit: contain; 
-            border-radius: 8px; 
-            display: block;
-        }
-        .social-link:hover { transform: translateY(-3px) scale(1.1); } 
+        .modal-preview-wrapper { text-align: center; margin-bottom: 15px; background: #f9f9f9; border-radius: 8px; padding: 10px; }
+        .modal-preview-img { width: 100%; height: 220px; object-fit: contain; border-radius: 8px; }
 
-        .float-btn {
-            position: fixed; bottom: 20px; right: 20px;
-            background-color: #25D366; color: white;
-            padding: 10px 20px; /* 稍微调整padding */
-            border-radius: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            font-weight: bold; text-decoration: none;
-            z-index: 100; display: flex; align-items: center;
-            gap: 8px; /* 图标和文字间距 */
+        .modal-section { margin-bottom: 15px; }
+        .modal-label { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 8px; display: block; }
+        
+        .selection-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .selection-btn {
+            border: 1px solid #ddd; background: #fff; padding: 10px; border-radius: 8px;
+            text-align: center; font-size: 14px; cursor: pointer; transition: 0.2s;
         }
-        /* 新增：WhatsApp Logo 样式 */
-        .wa-logo-img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
+        .selection-btn.selected { background-color: #e3f2fd; border-color: #0095f6; color: #0095f6; font-weight: bold; }
+
+        .confirm-btn {
+            width: 100%; padding: 12px; background-color: #0095f6; color: white;
+            border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer;
         }
+
+        /* Footer & Social */
+        footer { margin-top: 40px; padding: 20px; background-color: #fff; border-top: 1px solid #eee; border-radius: 12px; text-align: center; font-size: 13px; color: #666; line-height: 1.6; }
+        .footer-title { font-weight: bold; color: #333; margin-bottom: 8px; font-size: 14px; }
+        .social-section { margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
+        .social-icons { display: flex; justify-content: center; gap: 25px; align-items: center; margin-top: 10px;}
+        .social-link img { width: 40px; height: 40px; border-radius: 8px; display: block; }
+        
+        .float-btn { position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; padding: 10px 20px; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-weight: bold; text-decoration: none; z-index: 100; display: flex; align-items: center; gap: 8px; }
+        .wa-logo-img { width: 24px; height: 24px; object-fit: contain; }
     </style>
 </head>
 <body>
@@ -135,6 +108,14 @@
         <p class="subtitle">100% Authentic Blind Boxes · Custom Video | WhatsApp Order</p>
     </header>
     
+    <div class="currency-wrapper">
+        <select id="currencySelector" class="currency-select" onchange="changeCurrency()">
+            <option value="MYR">🇲🇾 MYR (马币)</option>
+            <option value="SGD">🇸🇬 SGD (新币)</option>
+            <option value="USD">🇺🇸 USD (美金)</option>
+        </select>
+    </div>
+
     <div class="search-wrapper">
         <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search Products...">
     </div>
@@ -144,169 +125,222 @@
     <footer>
         <div class="footer-title">📦 Purchase Info (购买须知)</div>
         <p>
-            <b>Shipping (Blind Box):</b> J&T Express / PosLaju<br>
+            <b>Shipping (Blind Box & Plushie):</b> J&T Express / PosLaju<br>
             <b>Custom Video:</b> 🌍 Global Delivery (Online)<br>
-            ⚠️ No return after opening (拆封不退换)
+            ⚠️ No return after opening (拆封不退换)<br>
+            <span style="font-size:12px; color:#E1306C; font-weight:bold;">
+                * Foreign currency prices are estimates only. Final price confirmed via WhatsApp.<br>
+                (汇率仅供参考，具体价格以私聊为准)
+            </span>
         </p>
 
         <div class="social-section">
-            <span class="social-label">Follow Us 关注我们</span>
+            <span style="font-weight:bold; font-size:14px;">Follow Us 关注我们</span>
             <div class="social-icons">
-                <a href="https://xhslink.com/m/5bQZ298AzfF" target="_blank" class="social-link">
-                    <img src="https://i.postimg.cc/Jz7q8tXg/Xiaohongshu-LOGO.png" alt="Xiaohongshu">
-                </a>
-                <a href="https://www.instagram.com/bubu_dudu_store?igsh=cWt3enZpZGszNWJx" target="_blank" class="social-link">
-                    <img src="https://i.postimg.cc/9fKtypkw/Instagram-icon.png" alt="Instagram">
-                </a>
-                <a href="https://www.tiktok.com/@yierlovebubu1212?_r=1&_t=ZS-92KcH6zZuSd" target="_blank" class="social-link">
-                    <img src="https://i.postimg.cc/76z19zvQ/tiktok-app-icon-social-media-logo-277909-647.avif" alt="TikTok">
-                </a>
+                <a href="https://xhslink.com/m/5bQZ298AzfF" target="_blank" class="social-link"><img src="https://i.postimg.cc/Jz7q8tXg/Xiaohongshu-LOGO.png"></a>
+                <a href="https://www.instagram.com/bubu_dudu_store?igsh=cWt3enZpZGszNWJx" target="_blank" class="social-link"><img src="https://i.postimg.cc/9fKtypkw/Instagram-icon.png"></a>
+                <a href="https://www.tiktok.com/@yierlovebubu1212?_r=1&_t=ZS-92KcH6zZuSd" target="_blank" class="social-link"><img src="https://i.postimg.cc/76z19zvQ/tiktok-app-icon-social-media-logo-277909-647.avif"></a>
             </div>
         </div>
-
         <p style="margin-top:20px; font-size:12px; color:#999;">© 2025 Bubu Dudu Store 一二布布商店</p>
     </footer>
 
     <a href="https://wa.me/601110720061?text=Hi%20Bubu%20Dudu%20Store" target="_blank" class="float-btn">
-        <img src="https://i.postimg.cc/YCkWKP5R/Whats-App-svg.webp" class="wa-logo-img" alt="WhatsApp">
-        Chat
+        <img src="https://i.postimg.cc/YCkWKP5R/Whats-App-svg.webp" class="wa-logo-img"> Chat
     </a>
+
+    <div id="plushieModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="modal-header">Choose Options (选择规格)</div>
+            
+            <div class="modal-preview-wrapper">
+                <img id="modalPreviewImg" src="" class="modal-preview-img">
+            </div>
+
+            <div class="modal-section">
+                <span class="modal-label">1. Character (款式) <span style="color:red">*</span></span>
+                <div class="selection-grid" id="charGrid">
+                    <div class="selection-btn" onclick="selectChar(this, 'Bubu (一二)', 'https://i.postimg.cc/zbbjL2wx/Whats-App-Image-2026-02-01-at-12-17-46-PM-(2).jpg')">🐻‍❄️ Bubu (一二)</div>
+                    <div class="selection-btn" onclick="selectChar(this, 'Dudu (布布)', 'https://i.postimg.cc/sQQcBHP4/Whats-App-Image-2026-02-01-at-12-17-47-PM.jpg')">🐻 Dudu (布布)</div>
+                    <div class="selection-btn" style="grid-column: span 2;" onclick="selectChar(this, 'Pair (一对)', 'https://i.postimg.cc/Hx3PhfVf/Whats-App-Image-2026-02-01-at-12-21-33-PM.jpg')">💕 Pair (一对)</div>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <span class="modal-label">2. Size (尺寸) <span style="color:red">*</span></span>
+                <div class="selection-grid" id="sizeGrid">
+                    <div class="selection-btn size-btn" data-price-rm="25" onclick="selectSize(this, '25cm', 25, 'https://i.postimg.cc/Bt13sqFj/Whats-App-Image-2026-02-01-at-12-41-31-PM.jpg')">25cm</div>
+                    <div class="selection-btn size-btn" data-price-rm="40" onclick="selectSize(this, '35cm', 40, 'https://i.postimg.cc/Bt13sqFj/Whats-App-Image-2026-02-01-at-12-41-31-PM.jpg')">35cm</div>
+                    <div class="selection-btn size-btn" data-price-rm="60" onclick="selectSize(this, '45cm', 60, 'https://i.postimg.cc/V0MPFR1P/Whats-App-Image-2026-02-01-at-12-41-31-PM-(1).jpg')">45cm</div>
+                    <div class="selection-btn size-btn" data-price-rm="90" onclick="selectSize(this, '60cm', 90, 'https://i.postimg.cc/V0MPFR1P/Whats-App-Image-2026-02-01-at-12-41-31-PM-(1).jpg')">60cm</div>
+                </div>
+            </div>
+
+            <button class="confirm-btn" onclick="confirmPlushieOrder()">Confirm Order (确认下单)</button>
+        </div>
+    </div>
 
     <script>
         const myPhoneNumber = "601110720061"; 
         
+        // ✨ 汇率设置 (已更新：0.4 SGD, 0.35 USD)
+        const exchangeRates = {
+            'MYR': { rate: 1, symbol: 'RM' },
+            'SGD': { rate: 0.40, symbol: 'S$' },
+            'USD': { rate: 0.35, symbol: 'US$' }
+        };
+        let currentCurrency = 'MYR';
+
+        let selectedCharacter = "";
+        let selectedSize = "";
+        let selectedPriceRM = 0; 
+
+        // 默认封面图
+        const defaultPlushieImg = "https://i.postimg.cc/PCFhTNSM/Whats-App-Image-2026-02-01-at-1-04-39-PM.jpg";
+
         const products = [
-            // --- 定制视频 ---
+            // 1. 定制视频
             {
                 id: 'custom-video',
                 name: "Custom Bubu Dudu Video (专属定制视频)",
-                desc: "We create the most heartwarming custom videos for you! \nAnniversaries, Birthdays, Proposals, Life Stories.\n我们为您打造最治愈的专属定制视频！\n\n🌍 **Global Delivery / 全球交付**", 
-                price: 0, 
-                isCustom: true,
-                inStock: true,
-                imgProducts: [
-                    "https://i.postimg.cc/yxhjTRqY/bubu-dudu-custom-video.jpg"
-                ],
-                imgSingle: "https://i.postimg.cc/yxhjTRqY/bubu-dudu-custom-video.jpg",
-                imgWhole: "" 
+                desc: "We create the most heartwarming custom videos for you! \nAnniversaries, Birthdays, Proposals.\n\n🌍 **Global Delivery / 全球交付**", 
+                price: 0, isCustom: true, inStock: true,
+                imgProducts: ["https://i.postimg.cc/yxhjTRqY/bubu-dudu-custom-video.jpg"],
+                imgSingle: "https://i.postimg.cc/yxhjTRqY/bubu-dudu-custom-video.jpg"
             },
-
-            // --- 商品 1 ---
+            // 2. 毛绒公仔
             { 
-                id: 1, 
-                name: "Bubu Dudu Series 2 (一二布布 第二弹)", 
-                desc: "Super cute Bubu blind box! 向左滑动查看更多图片 👈", 
-                price: 25, wholeSetPrice: 200, setCount: 10,
-                inStock: true, 
-                isCustom: false,
-
+                id: 3, 
+                name: "Bubu Dudu Plushie Doll (一二布布绒毛公仔)", 
+                desc: "Super soft! Bubu (Panda) & Dudu (Bear). \n\n📏 **Sizes:** 25cm / 35cm / 45cm / 60cm", 
+                price: 25, priceMax: 90, 
+                inStock: true, isCustom: false, isPlushie: true,
                 imgProducts: [
-                    "https://i.postimg.cc/HnXMk5MF/di-er-dan-chan-pin1.jpg",
-                    "https://i.postimg.cc/FsbctyNJ/di-er-dan-chan-pin2.jpg",
-                    "https://i.postimg.cc/XvqyytFv/di-er-dan-chan-pin3.jpg"
+                    "https://i.postimg.cc/PCFhTNSM/Whats-App-Image-2026-02-01-at-1-04-39-PM.jpg", 
+                    "https://i.postimg.cc/Hx3PhfVf/Whats-App-Image-2026-02-01-at-12-21-33-PM.jpg", 
+                    "https://i.postimg.cc/zbbjL2wx/Whats-App-Image-2026-02-01-at-12-17-46-PM-(2).jpg", 
+                    "https://i.postimg.cc/sQQcBHP4/Whats-App-Image-2026-02-01-at-12-17-47-PM.jpg", 
+                    "https://i.postimg.cc/qvJsqzqv/Whats-App-Image-2026-02-01-at-1-04-39-PM-(2).jpg", 
+                    "https://i.postimg.cc/fJ4Hdsrt/Whats-App-Image-2026-02-01-at-12-17-45-PM.jpg", 
+                    "https://i.postimg.cc/Bt13sqFj/Whats-App-Image-2026-02-01-at-12-41-31-PM.jpg", 
+                    "https://i.postimg.cc/V0MPFR1P/Whats-App-Image-2026-02-01-at-12-41-31-PM-(1).jpg",
+                    "https://i.postimg.cc/KYPWnKFD/Whats-App-Image-2026-02-01-at-12-17-45-PM-(1).jpg",
+                    "https://i.postimg.cc/qhhLtDcm/Whats-App-Image-2026-02-01-at-12-17-45-PM-(2).jpg",
+                    "https://i.postimg.cc/N994yC8b/Whats-App-Image-2026-02-01-at-12-17-46-PM.jpg",
+                    "https://i.postimg.cc/sQQcBHPJ/Whats-App-Image-2026-02-01-at-12-17-46-PM-(1).jpg"
                 ],
-                imgSingle: "https://i.postimg.cc/521tV8yz/di-er-dan-yi-he.jpg", 
-                imgWhole:  "https://i.postimg.cc/2jMmzhcd/di-er-dan-duan-he.jpg"    
+                imgSingle: "https://i.postimg.cc/PCFhTNSM/Whats-App-Image-2026-02-01-at-1-04-39-PM.jpg",
+                imgWhole:  ""    
             },
-
-            // --- 商品 2 ---
+            // 3. 盲盒
             { 
-                id: 2, 
-                name: "Bubu Dudu Series 3 (一二布布 第三弹)", 
-                desc: "New Series 3 released! 最新第三弹 ✨", 
-                price: 25, wholeSetPrice: 240, setCount: 12,
-                inStock: true,
-                isCustom: false,
-
-                imgProducts: [
-                    "https://i.postimg.cc/Yq6PYfcx/di-san-dan-chan-pin1.jpg",
-                    "https://i.postimg.cc/MHy90xLz/di-san-dan-chan-pin2.jpg",
-                    "https://i.postimg.cc/g0XqqmXd/di-san-dan-chan-pin3.jpg"
-                ],
-                imgSingle: "https://i.postimg.cc/SRXZnC6n/di-san-dan-dan-he.jpg", 
-                imgWhole:  "https://i.postimg.cc/xdRph0fh/di-san-dan-duan-he.jpg"    
+                id: 1, name: "Bubu Dudu Series 2 (一二布布 第二弹)", desc: "Super cute blind box! Swipe left 👉", price: 25, wholeSetPrice: 200, setCount: 10, inStock: true,
+                imgProducts: ["https://i.postimg.cc/HnXMk5MF/di-er-dan-chan-pin1.jpg","https://i.postimg.cc/FsbctyNJ/di-er-dan-chan-pin2.jpg","https://i.postimg.cc/XvqyytFv/di-er-dan-chan-pin3.jpg"],
+                imgSingle: "https://i.postimg.cc/521tV8yz/di-er-dan-yi-he.jpg", imgWhole: "https://i.postimg.cc/2jMmzhcd/di-er-dan-duan-he.jpg"    
+            },
+            // 4. 盲盒
+            { 
+                id: 2, name: "Bubu Dudu Series 3 (一二布布 第三弹)", desc: "New Series 3 released! ✨", price: 25, wholeSetPrice: 240, setCount: 12, inStock: true,
+                imgProducts: ["https://i.postimg.cc/Yq6PYfcx/di-san-dan-chan-pin1.jpg","https://i.postimg.cc/MHy90xLz/di-san-dan-chan-pin2.jpg","https://i.postimg.cc/g0XqqmXd/di-san-dan-chan-pin3.jpg"],
+                imgSingle: "https://i.postimg.cc/SRXZnC6n/di-san-dan-dan-he.jpg", imgWhole: "https://i.postimg.cc/xdRph0fh/di-san-dan-duan-he.jpg"    
             }
         ];
 
         const container = document.getElementById('productContainer');
         const searchInput = document.getElementById('searchInput');
 
+        // --- 价格格式化 ---
+        function formatPrice(priceInRM) {
+            const currencyData = exchangeRates[currentCurrency];
+            const converted = (priceInRM * currencyData.rate).toFixed(2);
+            return `${currencyData.symbol} ${converted}`;
+        }
+
+        function changeCurrency() {
+            const selector = document.getElementById('currencySelector');
+            currentCurrency = selector.value;
+            renderProducts(products);
+            updateModalPrices();
+        }
+
         function renderProducts(items) {
             container.innerHTML = "";
-            if(items.length === 0) {
-                container.innerHTML = "<p style='text-align:center;width:100%'>No products found</p>";
-                return;
-            }
+            if(items.length === 0) { container.innerHTML = "<p style='text-align:center;width:100%'>No products found</p>"; return; }
             items.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
 
-                let soldOutClass = '';
-                let soldOutOverlay = '';
-                if (!product.inStock) {
-                    soldOutClass = 'is-sold-out';
-                    soldOutOverlay = `<div class="sold-out-overlay">❌ Sold Out</div>`;
-                }
-                
                 let slidesHtml = '';
                 if(product.imgProducts && product.imgProducts.length > 0) {
-                    product.imgProducts.forEach(imgUrl => {
-                        slidesHtml += `<img src="${imgUrl}" class="carousel-img" alt="Product Image">`;
-                    });
-                } else {
-                    slidesHtml = `<img src="https://via.placeholder.com/600x400" class="carousel-img">`;
-                }
+                    product.imgProducts.forEach(imgUrl => { slidesHtml += `<img src="${imgUrl}" class="carousel-img">`; });
+                } else { slidesHtml = `<img src="https://via.placeholder.com/600x400" class="carousel-img">`; }
 
                 let wholeSetOptionHtml = '';
-                let priceDisplay = `RM ${product.price} / each`;
+                let priceDisplay = '';
+                
+                if(product.isPlushie) {
+                    priceDisplay = `${formatPrice(product.price)} - ${formatPrice(product.priceMax)}`;
+                } else {
+                    priceDisplay = `${formatPrice(product.price)} / each`;
+                }
+
                 let singleBtnText = "Single / 散盒";
                 let btnColorClass = "btn-blue";
                 let qtyDisplay = `Qty: <input type="number" id="qty-${product.id}" class="qty-input" value="1" min="1">`;
+                let clickAction = "";
 
                 if (product.isCustom) {
                     priceDisplay = "DM for Quote / 私信询价";
                     singleBtnText = "Inquire / 咨询";
                     btnColorClass = "btn-purple";
                     qtyDisplay = ""; 
-                } else if (product.wholeSetPrice && product.setCount) {
-                    wholeSetOptionHtml = `
-                        <div class="option-row">
-                            <img src="${product.imgWhole}" class="option-thumb" alt="Whole Set">
-                            <div class="option-details">
-                                <div class="option-title">🔥 Whole Set (${product.setCount} pcs)</div>
-                                <div class="option-price">RM ${product.wholeSetPrice}</div>
+                    clickAction = `orderCustomVideo('${product.name}')`;
+                } 
+                else if (product.isPlushie) {
+                    singleBtnText = "Choose Size / 选尺寸";
+                    btnColorClass = "btn-blue";
+                    qtyDisplay = ""; 
+                    clickAction = `openPlushieModal()`;
+                }
+                else {
+                    clickAction = `orderSingle('${product.name}', ${product.price}, '${product.id}')`;
+                    if (product.wholeSetPrice && product.setCount) {
+                        wholeSetOptionHtml = `
+                            <div class="option-row">
+                                <img src="${product.imgWhole}" class="option-thumb" alt="Whole Set">
+                                <div class="option-details">
+                                    <div class="option-title">🔥 Whole Set (${product.setCount} pcs)</div>
+                                    <div class="option-price">${formatPrice(product.wholeSetPrice)}</div>
+                                </div>
+                                <button class="action-btn btn-orange" onclick="orderWholeSet('${product.name}', ${product.wholeSetPrice}, ${product.setCount})">
+                                    Set / 端盒
+                                </button>
                             </div>
-                            <button class="action-btn btn-orange" onclick="orderWholeSet('${product.name}', ${product.wholeSetPrice}, ${product.setCount})">
-                                Set / 端盒
-                            </button>
-                        </div>
-                    `;
+                        `;
+                    }
                 }
 
                 card.innerHTML = `
-                    <div class="${soldOutClass}" style="height:100%; display:flex; flex-direction:column;">
-                        ${soldOutOverlay}
+                    <div style="height:100%; display:flex; flex-direction:column;">
+                        ${!product.inStock ? '<div class="sold-out-overlay">❌ Sold Out</div>' : ''}
                         <div class="carousel-wrapper">
                             <div class="carousel-scroll">${slidesHtml}</div>
                             <div class="carousel-badge">Swipe ↔</div>
                         </div>
-                        
                         <div class="product-header">
                             <div class="product-name">${product.name}</div>
                             <div class="product-desc">${product.desc}</div>
                         </div>
-
                         <div class="options-container">
                             <div class="option-row">
                                 <img src="${product.imgSingle}" class="option-thumb" alt="Item">
                                 <div class="option-details">
-                                    <div class="option-title">${product.isCustom ? "Personalized Custom Video" : "Single Box (Random)"}</div>
+                                    <div class="option-title">${product.isCustom ? "Personalized Custom Video" : (product.isPlushie ? "Plushie Doll" : "Single Box (Random)")}</div>
                                     <div class="option-price" style="${product.isCustom ? 'color:#8338ec' : ''}">${priceDisplay}</div>
-                                    <div class="qty-row">
-                                        ${qtyDisplay}
-                                    </div>
+                                    <div class="qty-row">${qtyDisplay}</div>
                                 </div>
-                                <button class="action-btn ${btnColorClass}" onclick="orderSingle('${product.name}', ${product.price}, '${product.id}', ${product.isCustom})">
+                                <button class="action-btn ${btnColorClass}" onclick="${clickAction}">
                                     ${singleBtnText}
                                 </button>
                             </div>
@@ -318,28 +352,79 @@
             });
         }
 
-        function orderSingle(name, price, id, isCustom) {
-            let message = "";
-            
-            if (isCustom) {
-                // ✨ 1. 定制视频: Hi Bubu Dudu Store, Custom Video
-                message = `Hi Bubu Dudu Store, Custom Video! 🐻\n\nI am interested in:\n🎥 **${name}**\n\nI would like to request a quote for a custom video.\n\nMy Request (Type/Occasion): \n(e.g., Birthday, Anniversary...)`;
-            } else {
-                const qtyInput = document.getElementById(`qty-${id}`);
-                const quantity = qtyInput.value;
-                const totalPrice = price * quantity;
-                // ✨ 2. 盲盒产品: Hi Bubu Dudu Store, Bubu Dudu Blind Box
-                message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box! \n\nI want to order:\nItem: ${name}\nType: Single Box\nQty: ${quantity}\nTotal: RM ${totalPrice}\n\nIs this available?`;
-            }
-            
+        // --- 功能函数 ---
+        function orderCustomVideo(name) {
+            const message = `Hi Bubu Dudu Store, Custom Video! 🐻\n\nI am interested in:\n🎥 **${name}**\n\nI would like to request a quote for a custom video.`;
             sendToWhatsapp(message);
         }
 
-        function orderWholeSet(name, setPrice, count) {
-            // ✨ 2. 盲盒产品: Hi Bubu Dudu Store, Bubu Dudu Blind Box
-            const message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box! \n\nI want to order:\nItem: ${name}\nType: 🔥 Whole Set (${count}pcs)\nPrice: RM ${setPrice}\n\nIs this available?`;
+        function orderSingle(name, priceRM, id) {
+            const qtyInput = document.getElementById(`qty-${id}`);
+            const quantity = qtyInput.value;
+            const totalPriceRM = priceRM * quantity;
+            const totalPriceForeign = formatPrice(totalPriceRM);
+            const message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box! \n\nI want to order:\nItem: ${name}\nType: Single Box\nQty: ${quantity}\nTotal: RM ${totalPriceRM} (approx ${totalPriceForeign})\n\nIs this available?`;
             sendToWhatsapp(message);
         }
+
+        function orderWholeSet(name, setPriceRM, count) {
+            const setPriceForeign = formatPrice(setPriceRM);
+            const message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box! \n\nI want to order:\nItem: ${name}\nType: 🔥 Whole Set (${count}pcs)\nPrice: RM ${setPriceRM} (approx ${setPriceForeign})\n\nIs this available?`;
+            sendToWhatsapp(message);
+        }
+
+        // --- 弹窗逻辑 ---
+        function openPlushieModal() {
+            document.getElementById('plushieModal').style.display = 'flex';
+            document.getElementById('modalPreviewImg').src = defaultPlushieImg; 
+            selectedCharacter = ""; selectedSize = ""; selectedPriceRM = 0;
+            updateSelectionUI('charGrid', null); updateSelectionUI('sizeGrid', null);
+            updateModalPrices(); 
+        }
+        function closeModal() { document.getElementById('plushieModal').style.display = 'none'; }
+        
+        function updateModalPrices() {
+            const btns = document.querySelectorAll('.size-btn');
+            btns.forEach(btn => {
+                const basePrice = btn.getAttribute('data-price-rm');
+                const sizeLabel = btn.innerText.split('(')[0].trim(); 
+                if(sizeLabel.includes('cm')) {
+                     const pureSize = sizeLabel.replace(/[^0-9]cm/g, '').substring(0, 4); 
+                     btn.innerText = `${pureSize} (${formatPrice(basePrice)})`;
+                }
+            });
+        }
+
+        function selectChar(element, char, imgUrl) { 
+            selectedCharacter = char; 
+            updateSelectionUI('charGrid', element);
+            document.getElementById('modalPreviewImg').src = imgUrl;
+        }
+
+        function selectSize(element, size, priceRM, imgUrl) { 
+            selectedSize = size; 
+            selectedPriceRM = priceRM; 
+            updateSelectionUI('sizeGrid', element);
+            document.getElementById('modalPreviewImg').src = imgUrl;
+        }
+
+        function updateSelectionUI(gridId, activeElement) {
+            const btns = document.getElementById(gridId).children;
+            for(let btn of btns) { btn.classList.remove('selected'); }
+            if(activeElement) activeElement.classList.add('selected');
+        }
+
+        function confirmPlushieOrder() {
+            if(!selectedCharacter || !selectedSize) { alert("Please select both Character and Size! \n请选择款式和尺寸！"); return; }
+            let finalPriceRM = selectedPriceRM;
+            if(selectedCharacter.includes("Pair")) { finalPriceRM = selectedPriceRM * 2; }
+            const finalPriceForeign = formatPrice(finalPriceRM);
+            const message = `Hi Bubu Dudu Store! 🐻\n\nI want to order **Plushie Doll**:\n\n1. Character: ${selectedCharacter}\n2. Size: ${selectedSize}\n\n💰 Price: RM ${finalPriceRM} (approx ${finalPriceForeign})\n\nIs this available?`;
+            sendToWhatsapp(message);
+            closeModal();
+        }
+
+        window.onclick = function(event) { if (event.target == document.getElementById('plushieModal')) { closeModal(); } }
 
         function sendToWhatsapp(msg) {
             const encodedMsg = encodeURIComponent(msg);
@@ -354,9 +439,11 @@
         });
 
         renderProducts(products);
+        updateModalPrices();
     </script>
 </body>
 </html>
+
 
 
 
