@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubu Dudu Store 一二布布商店</title>
+    <title>Bubu Dudu Store</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/XqPRJTcj/Whats-App-Image-2026-01-11-at-6-52-12-PM-2-removebg-preview.png">
 
     <style>
         /* --- 基础样式 --- */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; margin: 0; padding: 20px; color: #262626; padding-bottom: 80px; }
         
-        header { text-align: center; margin-bottom: 20px; padding-top: 10px; }
+        header { text-align: center; margin-bottom: 25px; padding-top: 10px; }
         .store-logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 12px; }
         h1 { margin: 0; font-size: 22px; color: #262626; font-weight: 800; letter-spacing: -0.5px; }
         p.subtitle { color: #8e8e8e; font-size: 13px; margin-top: 6px; }
 
-        /* 货币选择器样式 */
-        .currency-wrapper { text-align: center; margin-bottom: 20px; }
-        .currency-select {
-            padding: 8px 12px; border-radius: 20px; border: 1px solid #ddd;
-            background-color: #fff; font-size: 14px; font-weight: bold; color: #333;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); outline: none; cursor: pointer;
+        /* ✨ 控制栏 */
+        .controls-container {
+            display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px; margin-bottom: 15px;
         }
+        .control-select {
+            padding: 8px 20px; border-radius: 30px; border: 1px solid #dbdbdb; background-color: #fff; font-size: 14px; font-weight: bold; color: #333; outline: none; cursor: pointer; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); -webkit-appearance: none; 
+        }
+        .control-select:focus { border-color: #0095f6; }
 
         .search-wrapper { margin-bottom: 20px; }
         .search-box { width: 100%; padding: 12px 15px; border: 1px solid #dbdbdb; border-radius: 8px; background-color: #efefef; font-size: 16px; box-sizing: border-box; outline: none; }
@@ -57,9 +58,9 @@
         .btn-purple { background-color: #8338ec; color: white; }
         button:active { opacity: 0.7; }
 
-        /* --- 弹窗样式 --- */
+        /* 弹窗 */
         .modal {
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center;
         }
         .modal-content {
@@ -84,12 +85,16 @@
         }
         .selection-btn.selected { background-color: #e3f2fd; border-color: #0095f6; color: #0095f6; font-weight: bold; }
 
+        /* 袜子自定义数量输入区域 */
+        .custom-qty-wrapper { margin-top: 15px; padding-top: 10px; border-top: 1px dashed #eee; display: none; }
+        .custom-qty-row { display: flex; align-items: center; margin-top: 5px; }
+        .custom-qty-input { width: 60px; padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 16px; margin-left: 10px; }
+
         .confirm-btn {
             width: 100%; padding: 12px; background-color: #0095f6; color: white;
             border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer;
         }
 
-        /* Footer & Social */
         footer { margin-top: 40px; padding: 20px; background-color: #fff; border-top: 1px solid #eee; border-radius: 12px; text-align: center; font-size: 13px; color: #666; line-height: 1.6; }
         .footer-title { font-weight: bold; color: #333; margin-bottom: 8px; font-size: 14px; }
         .social-section { margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px; }
@@ -104,118 +109,195 @@
 
     <header>
         <img src="https://i.postimg.cc/pXqynd9c/Bubu-dudu-shop-logo.jpg" alt="Bubu Dudu Store Logo" class="store-logo">
-        <h1>Bubu Dudu Store 一二布布商店</h1>
-        <p class="subtitle">100% Authentic Blind Boxes · Custom Video | WhatsApp Order</p>
+        <h1 id="txt_title">Bubu Dudu Store 一二布布商店</h1>
+        <p class="subtitle" id="txt_subtitle">100% Authentic Blind Boxes · Custom Video | WhatsApp Order</p>
+
+        <div class="controls-container">
+            <select id="langSelector" class="control-select" onchange="changeLanguage()">
+                <option value="zh">🇨🇳 中文</option>
+                <option value="en">🇬🇧 English</option>
+            </select>
+
+            <select id="currencySelector" class="control-select" onchange="changeCurrency()">
+                <option value="MYR">🇲🇾 MYR</option>
+                <option value="SGD">🇸🇬 SGD</option>
+                <option value="USD">🇺🇸 USD</option>
+            </select>
+        </div>
     </header>
     
-    <div class="currency-wrapper">
-        <select id="currencySelector" class="currency-select" onchange="changeCurrency()">
-            <option value="MYR">🇲🇾 MYR (马币)</option>
-            <option value="SGD">🇸🇬 SGD (新币)</option>
-            <option value="USD">🇺🇸 USD (美金)</option>
-        </select>
-    </div>
-
     <div class="search-wrapper">
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search Products...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜索商品...">
     </div>
 
     <div id="productContainer" class="product-grid"></div>
 
     <footer>
-        <div class="footer-title">📦 Purchase Info (购买须知)</div>
-        <p>
-            <b>Shipping (Blind Box & Plushie):</b> J&T Express / PosLaju<br>
-            <b>Custom Video:</b> 🌍 Global Delivery (Online)<br>
-            ⚠️ No return after opening (拆封不退换)<br>
-            <span style="font-size:12px; color:#E1306C; font-weight:bold;">
-                * Foreign currency prices are estimates only. Final price confirmed via WhatsApp.<br>
-                (汇率仅供参考，具体价格以私聊为准)
-            </span>
+        <div class="footer-title" id="txt_purchase_info">📦 购买须知</div>
+        <p id="txt_footer_desc">
+            <b>发货 (盲盒 & 公仔):</b> J&T Express / PosLaju<br>
+            <b>定制视频:</b> 🌍 全球发货 (线上交付)<br>
+            ⚠️ 拆封不退换
+        </p>
+        <p style="font-size:12px; color:#E1306C; font-weight:bold;" id="txt_disclaimer">
+            * 汇率仅供参考，具体价格以私聊为准。
         </p>
 
         <div class="social-section">
-            <span style="font-weight:bold; font-size:14px;">Follow Us 关注我们</span>
+            <span style="font-weight:bold; font-size:14px;" id="txt_follow_us">关注我们 Follow Us</span>
             <div class="social-icons">
                 <a href="https://xhslink.com/m/5bQZ298AzfF" target="_blank" class="social-link"><img src="https://i.postimg.cc/Jz7q8tXg/Xiaohongshu-LOGO.png"></a>
                 <a href="https://www.instagram.com/bubu_dudu_store?igsh=cWt3enZpZGszNWJx" target="_blank" class="social-link"><img src="https://i.postimg.cc/9fKtypkw/Instagram-icon.png"></a>
                 <a href="https://www.tiktok.com/@yierlovebubu1212?_r=1&_t=ZS-92KcH6zZuSd" target="_blank" class="social-link"><img src="https://i.postimg.cc/76z19zvQ/tiktok-app-icon-social-media-logo-277909-647.avif"></a>
             </div>
         </div>
-        <p style="margin-top:20px; font-size:12px; color:#999;">© 2025 Bubu Dudu Store 一二布布商店</p>
+        <p style="margin-top:20px; font-size:12px; color:#999;">© 2025 Bubu Dudu Store</p>
     </footer>
 
     <a href="https://wa.me/601110720061?text=Hi%20Bubu%20Dudu%20Store" target="_blank" class="float-btn">
         <img src="https://i.postimg.cc/YCkWKP5R/Whats-App-svg.webp" class="wa-logo-img"> Chat
     </a>
 
-    <div id="plushieModal" class="modal">
+    <div id="productModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-            <div class="modal-header">Choose Options (选择规格)</div>
+            <div class="modal-header" id="txt_modal_title">选择规格</div>
             
             <div class="modal-preview-wrapper">
                 <img id="modalPreviewImg" src="" class="modal-preview-img">
             </div>
 
-            <div class="modal-section">
-                <span class="modal-label">1. Character (款式) <span style="color:red">*</span></span>
+            <div class="modal-section" id="sectionChar">
+                <span class="modal-label" id="txt_modal_char">1. 款式 <span style="color:red">*</span></span>
                 <div class="selection-grid" id="charGrid">
-                    <div class="selection-btn" onclick="selectChar(this, 'Bubu (一二)', 'https://i.postimg.cc/zbbjL2wx/Whats-App-Image-2026-02-01-at-12-17-46-PM-(2).jpg')">🐻‍❄️ Bubu (一二)</div>
-                    <div class="selection-btn" onclick="selectChar(this, 'Dudu (布布)', 'https://i.postimg.cc/sQQcBHP4/Whats-App-Image-2026-02-01-at-12-17-47-PM.jpg')">🐻 Dudu (布布)</div>
-                    <div class="selection-btn" style="grid-column: span 2;" onclick="selectChar(this, 'Pair (一对)', 'https://i.postimg.cc/Hx3PhfVf/Whats-App-Image-2026-02-01-at-12-21-33-PM.jpg')">💕 Pair (一对)</div>
+                    <div class="selection-btn" onclick="selectOption('char', this, 'Bubu', 'https://i.postimg.cc/zbbjL2wx/Whats-App-Image-2026-02-01-at-12-17-46-PM-(2).jpg')">🐻‍❄️ Bubu (一二)</div>
+                    <div class="selection-btn" onclick="selectOption('char', this, 'Dudu', 'https://i.postimg.cc/sQQcBHP4/Whats-App-Image-2026-02-01-at-12-17-47-PM.jpg')">🐻 Dudu (布布)</div>
+                    <div class="selection-btn" style="grid-column: span 2;" onclick="selectOption('char', this, 'Pair', 'https://i.postimg.cc/Hx3PhfVf/Whats-App-Image-2026-02-01-at-12-21-33-PM.jpg')">💕 Pair (一对)</div>
                 </div>
             </div>
 
             <div class="modal-section">
-                <span class="modal-label">2. Size (尺寸) <span style="color:red">*</span></span>
+                <span class="modal-label" id="txt_modal_size">2. 尺寸 <span style="color:red">*</span></span>
                 <div class="selection-grid" id="sizeGrid">
-                    <div class="selection-btn size-btn" data-price-rm="25" onclick="selectSize(this, '25cm', 25, 'https://i.postimg.cc/Bt13sqFj/Whats-App-Image-2026-02-01-at-12-41-31-PM.jpg')">25cm</div>
-                    <div class="selection-btn size-btn" data-price-rm="40" onclick="selectSize(this, '35cm', 40, 'https://i.postimg.cc/Bt13sqFj/Whats-App-Image-2026-02-01-at-12-41-31-PM.jpg')">35cm</div>
-                    <div class="selection-btn size-btn" data-price-rm="60" onclick="selectSize(this, '45cm', 60, 'https://i.postimg.cc/V0MPFR1P/Whats-App-Image-2026-02-01-at-12-41-31-PM-(1).jpg')">45cm</div>
-                    <div class="selection-btn size-btn" data-price-rm="90" onclick="selectSize(this, '60cm', 90, 'https://i.postimg.cc/V0MPFR1P/Whats-App-Image-2026-02-01-at-12-41-31-PM-(1).jpg')">60cm</div>
+                    </div>
+                
+                <div id="customQtySection" class="custom-qty-wrapper">
+                    <span class="modal-label" id="txt_custom_qty">或 自定义数量:</span>
+                    <div class="custom-qty-row">
+                        <input type="number" id="socksCustomInput" class="custom-qty-input" value="" min="1" placeholder="Qty" oninput="updateSocksCustomPrice()">
+                        <span style="margin-left:10px; font-weight:bold; color:#E1306C;" id="customPriceDisplay"></span>
+                    </div>
                 </div>
             </div>
 
-            <button class="confirm-btn" onclick="confirmPlushieOrder()">Confirm Order (确认下单)</button>
+            <button class="confirm-btn" id="txt_modal_confirm" onclick="confirmOrder()">确认下单</button>
         </div>
     </div>
 
     <script>
         const myPhoneNumber = "601110720061"; 
         
-        // ✨ 汇率设置 (已更新：0.4 SGD, 0.35 USD)
+        const translations = {
+            zh: {
+                title: "Bubu Dudu Store 一二布布商店",
+                subtitle: "100% 正品盲盒 · 专属定制视频 | WhatsApp 下单",
+                searchPlaceholder: "🔍 搜索商品...",
+                purchaseInfo: "📦 购买须知",
+                footerDesc: "<b>发货 (盲盒 & 公仔):</b> J&T Express / PosLaju<br><b>定制视频:</b> 🌍 全球发货 (线上交付)<br>⚠️ 拆封不退换",
+                disclaimer: "* 汇率仅供参考，具体价格以私聊为准。",
+                followUs: "关注我们 Follow Us",
+                singleBtn: "单盒 / Single",
+                setBtn: "端盒 / Whole Set",
+                inquireBtn: "咨询 / Inquire",
+                quotePrice: "私信询价",
+                chooseSize: "选尺寸 / Choose Size",
+                selectQty: "选数量 / Select Qty",
+                buyNow: "购买 / Buy", 
+                modalTitle: "选择规格",
+                modalChar: "1. 款式",
+                modalSize: "2. 尺寸",
+                modalBundle: "选择优惠套餐",
+                modalConfirm: "确认下单",
+                customQty: "或 自定义数量:",
+                soldOut: "❌ 售罄",
+                swipe: "滑动 ↔",
+                pairs: "双",
+                freeShip: "包邮"
+            },
+            en: {
+                title: "Bubu Dudu Store",
+                subtitle: "100% Authentic Blind Boxes · Custom Video | WhatsApp Order",
+                searchPlaceholder: "🔍 Search Products...",
+                purchaseInfo: "📦 Purchase Info",
+                footerDesc: "<b>Shipping (Blind Box & Plushie):</b> J&T Express / PosLaju<br><b>Custom Video:</b> 🌍 Global Delivery (Online)<br>⚠️ No return after opening",
+                disclaimer: "* Foreign currency prices are estimates only. Final price confirmed via WhatsApp.",
+                followUs: "Follow Us",
+                singleBtn: "Single Box",
+                setBtn: "Whole Set",
+                inquireBtn: "Inquire",
+                quotePrice: "DM for Quote",
+                chooseSize: "Choose Size",
+                selectQty: "Select Qty",
+                buyNow: "Buy Now",
+                modalTitle: "Choose Options",
+                modalChar: "1. Character",
+                modalSize: "2. Size",
+                modalBundle: "Select Bundle Deal",
+                modalConfirm: "Confirm Order",
+                customQty: "Or Custom Qty:",
+                soldOut: "❌ Sold Out",
+                swipe: "Swipe ↔",
+                pairs: "Pairs",
+                freeShip: "Free Ship"
+            }
+        };
+
         const exchangeRates = {
             'MYR': { rate: 1, symbol: 'RM' },
             'SGD': { rate: 0.40, symbol: 'S$' },
             'USD': { rate: 0.35, symbol: 'US$' }
         };
+
         let currentCurrency = 'MYR';
+        let currentLang = 'zh';
 
-        let selectedCharacter = "";
-        let selectedSize = "";
+        let currentProductType = ''; 
+        let selectedOption1 = ""; // Character or null
+        let selectedOption2 = ""; // Size or Bundle Name
         let selectedPriceRM = 0; 
-
-        // 默认封面图
-        const defaultPlushieImg = "https://i.postimg.cc/PCFhTNSM/Whats-App-Image-2026-02-01-at-1-04-39-PM.jpg";
-
+        
         const products = [
-            // 1. 定制视频
             {
                 id: 'custom-video',
-                name: "Custom Bubu Dudu Video (专属定制视频)",
-                desc: "We create the most heartwarming custom videos for you! \nAnniversaries, Birthdays, Proposals.\n\n🌍 **Global Delivery / 全球交付**", 
+                name: { zh: "Custom Bubu Dudu Video (专属定制视频)", en: "Custom Bubu Dudu Video" },
+                desc: { zh: "我们为您打造最治愈的专属定制视频！\n生日、纪念日、求婚、生活故事。\n🌍 **全球交付**", en: "We create the most heartwarming custom videos for you!\nAnniversaries, Birthdays, Proposals.\n🌍 **Global Delivery**" },
                 price: 0, isCustom: true, inStock: true,
                 imgProducts: ["https://i.postimg.cc/yxhjTRqY/bubu-dudu-custom-video.jpg"],
                 imgSingle: "https://i.postimg.cc/yxhjTRqY/bubu-dudu-custom-video.jpg"
             },
-            // 2. 毛绒公仔
+            {
+                // ✨ 袜子
+                id: 4,
+                name: { zh: "一二布布全棉中筒袜 | 高弹不勒脚", en: "[Premium Knit] Bubu & Dudu Cotton Crew Socks" },
+                desc: { 
+                    // 🔴 尺码已修改为 33-44码
+                    zh: "拒绝低质量印花！双面提花工艺，久穿不掉色。\n💰 **价格:** 1双 RM15 | 3双 RM28 | 5双 RM42 (包邮)\n🧶 **材质:** 78%棉 + 19%聚酯纤维 + 3%氨纶\n📏 **尺码:** 33-44码 (超强弹力)\n✨ **工艺:** 加密针织，质感厚实", 
+                    en: "Double-sided jacquard craftsmanship, patterns won't fade.\n💰 **Price:** 1 Pair RM15 | 3 Pairs RM28 | 5 Pairs RM42 (Free Ship)\n🧶 **Material:** 78% Cotton + 19% Poly + 3% Spandex\n📏 **Size:** EU 33-44 (High Elasticity)\n✨ **Craft:** High-density knitting" 
+                },
+                price: 15, 
+                inStock: true, isCustom: false, isPlushie: false, isSocks: true,
+                imgProducts: [
+                    "https://i.postimg.cc/SnXtJ2sr/Whats-App-Image-2026-02-12-at-7-12-58-PM.jpg", 
+                    "https://i.postimg.cc/ts1mYZTS/Whats-App-Image-2026-02-12-at-7-12-59-PM.jpg", 
+                    "https://i.postimg.cc/4YKFm7d8/Whats-App-Image-2026-02-12-at-7-13-02-PM.jpg"
+                ], 
+                imgSingle: "https://i.postimg.cc/SnXtJ2sr/Whats-App-Image-2026-02-12-at-7-12-58-PM.jpg"
+            },
             { 
                 id: 3, 
-                name: "Bubu Dudu Plushie Doll (一二布布绒毛公仔)", 
-                desc: "Super soft! Bubu (Panda) & Dudu (Bear). \n\n📏 **Sizes:** 25cm / 35cm / 45cm / 60cm", 
-                price: 25, priceMax: 90, 
-                inStock: true, isCustom: false, isPlushie: true,
+                name: { zh: "Bubu Dudu Plushie Doll (一二布布绒毛公仔)", en: "Bubu Dudu Plushie Doll" },
+                desc: { zh: "超级软萌！一二 和 布布。\n📏 **尺寸:** 25cm / 35cm / 45cm / 60cm", en: "Super soft! Bubu & Dudu.\n📏 **Sizes:** 25cm / 35cm / 45cm / 60cm" },
+                price: 25, priceMax: 90, inStock: true, isCustom: false, isPlushie: true,
                 imgProducts: [
                     "https://i.postimg.cc/PCFhTNSM/Whats-App-Image-2026-02-01-at-1-04-39-PM.jpg", 
                     "https://i.postimg.cc/Hx3PhfVf/Whats-App-Image-2026-02-01-at-12-21-33-PM.jpg", 
@@ -233,15 +315,19 @@
                 imgSingle: "https://i.postimg.cc/PCFhTNSM/Whats-App-Image-2026-02-01-at-1-04-39-PM.jpg",
                 imgWhole:  ""    
             },
-            // 3. 盲盒
             { 
-                id: 1, name: "Bubu Dudu Series 2 (一二布布 第二弹)", desc: "Super cute blind box! Swipe left 👉", price: 25, wholeSetPrice: 200, setCount: 10, inStock: true,
+                id: 1, 
+                name: { zh: "Bubu Dudu Series 2 (一二布布 第二弹)", en: "Bubu Dudu Series 2 (Blind Box)" },
+                desc: { zh: "超级可爱的一二布布盲盒！向左滑动查看更多图片 👉\n一盒有两个（一二和布布）", en: "Super cute Bubu Dudu blind box! Swipe left to see more 👉\nOne box get two (bubu and dudu)" },
+                price: 25, wholeSetPrice: 200, setCount: 10, inStock: true,
                 imgProducts: ["https://i.postimg.cc/HnXMk5MF/di-er-dan-chan-pin1.jpg","https://i.postimg.cc/FsbctyNJ/di-er-dan-chan-pin2.jpg","https://i.postimg.cc/XvqyytFv/di-er-dan-chan-pin3.jpg"],
                 imgSingle: "https://i.postimg.cc/521tV8yz/di-er-dan-yi-he.jpg", imgWhole: "https://i.postimg.cc/2jMmzhcd/di-er-dan-duan-he.jpg"    
             },
-            // 4. 盲盒
             { 
-                id: 2, name: "Bubu Dudu Series 3 (一二布布 第三弹)", desc: "New Series 3 released! ✨", price: 25, wholeSetPrice: 240, setCount: 12, inStock: true,
+                id: 2, 
+                name: { zh: "Bubu Dudu Series 3 (一二布布 第三弹)", en: "Bubu Dudu Series 3 (Blind Box)" },
+                desc: { zh: "最新发布的第三弹！ ✨\n一盒有两个（一二和布布）", en: "New Series 3 released! ✨\nOne box get two (bubu and dudu)" },
+                price: 25, wholeSetPrice: 240, setCount: 12, inStock: true,
                 imgProducts: ["https://i.postimg.cc/Yq6PYfcx/di-san-dan-chan-pin1.jpg","https://i.postimg.cc/MHy90xLz/di-san-dan-chan-pin2.jpg","https://i.postimg.cc/g0XqqmXd/di-san-dan-chan-pin3.jpg"],
                 imgSingle: "https://i.postimg.cc/SRXZnC6n/di-san-dan-dan-he.jpg", imgWhole: "https://i.postimg.cc/xdRph0fh/di-san-dan-duan-he.jpg"    
             }
@@ -250,7 +336,8 @@
         const container = document.getElementById('productContainer');
         const searchInput = document.getElementById('searchInput');
 
-        // --- 价格格式化 ---
+        // --- 核心逻辑 ---
+
         function formatPrice(priceInRM) {
             const currencyData = exchangeRates[currentCurrency];
             const converted = (priceInRM * currencyData.rate).toFixed(2);
@@ -258,15 +345,43 @@
         }
 
         function changeCurrency() {
-            const selector = document.getElementById('currencySelector');
-            currentCurrency = selector.value;
+            currentCurrency = document.getElementById('currencySelector').value;
             renderProducts(products);
-            updateModalPrices();
+            // 只要弹窗是开着的，就必须更新里面的价格
+            if(document.getElementById('productModal').style.display === 'flex') {
+                updateModalContent();
+            }
+            updateStaticText();
+        }
+
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelector').value;
+            updateStaticText();
+            renderProducts(products);
+            if(document.getElementById('productModal').style.display === 'flex') {
+                updateModalContent();
+            }
+        }
+
+        function updateStaticText() {
+            const t = translations[currentLang];
+            document.getElementById('txt_title').innerText = t.title;
+            document.getElementById('txt_subtitle').innerText = t.subtitle;
+            document.getElementById('txt_purchase_info').innerText = t.purchaseInfo;
+            document.getElementById('txt_footer_desc').innerHTML = t.footerDesc;
+            document.getElementById('txt_disclaimer').innerText = t.disclaimer;
+            document.getElementById('txt_follow_us').innerText = t.followUs;
         }
 
         function renderProducts(items) {
             container.innerHTML = "";
-            if(items.length === 0) { container.innerHTML = "<p style='text-align:center;width:100%'>No products found</p>"; return; }
+            const t = translations[currentLang];
+
+            if(items.length === 0) { 
+                container.innerHTML = `<p style='text-align:center;width:100%'>${currentLang === 'zh' ? '未找到商品' : 'No products found'}</p>`; 
+                return; 
+            }
+
             items.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
@@ -278,43 +393,44 @@
 
                 let wholeSetOptionHtml = '';
                 let priceDisplay = '';
-                
-                if(product.isPlushie) {
-                    priceDisplay = `${formatPrice(product.price)} - ${formatPrice(product.priceMax)}`;
-                } else {
-                    priceDisplay = `${formatPrice(product.price)} / each`;
-                }
-
-                let singleBtnText = "Single / 散盒";
+                let singleBtnText = t.singleBtn;
                 let btnColorClass = "btn-blue";
                 let qtyDisplay = `Qty: <input type="number" id="qty-${product.id}" class="qty-input" value="1" min="1">`;
                 let clickAction = "";
 
-                if (product.isCustom) {
-                    priceDisplay = "DM for Quote / 私信询价";
-                    singleBtnText = "Inquire / 咨询";
+                let pName = product.name[currentLang] || product.name['en'];
+                let pDesc = product.desc[currentLang] || product.desc['en'];
+
+                if(product.isPlushie) {
+                    priceDisplay = `${formatPrice(product.price)} - ${formatPrice(product.priceMax)}`;
+                    singleBtnText = t.chooseSize;
+                    qtyDisplay = "";
+                    clickAction = `openModal('plushie', '${product.imgSingle}')`;
+                } else if(product.isSocks) {
+                    priceDisplay = `${formatPrice(product.price)} / ${t.pairs}`;
+                    singleBtnText = t.selectQty;
+                    qtyDisplay = "";
+                    clickAction = `openModal('socks', '${product.imgSingle}')`;
+                } else if(product.isCustom) {
+                    priceDisplay = t.quotePrice;
+                    singleBtnText = t.inquireBtn;
                     btnColorClass = "btn-purple";
-                    qtyDisplay = ""; 
-                    clickAction = `orderCustomVideo('${product.name}')`;
-                } 
-                else if (product.isPlushie) {
-                    singleBtnText = "Choose Size / 选尺寸";
-                    btnColorClass = "btn-blue";
-                    qtyDisplay = ""; 
-                    clickAction = `openPlushieModal()`;
-                }
-                else {
-                    clickAction = `orderSingle('${product.name}', ${product.price}, '${product.id}')`;
+                    qtyDisplay = "";
+                    clickAction = `orderCustomVideo('${pName}')`;
+                } else {
+                    priceDisplay = `${formatPrice(product.price)} / each`;
+                    clickAction = `orderSingle('${pName}', ${product.price}, '${product.id}')`;
+                    
                     if (product.wholeSetPrice && product.setCount) {
                         wholeSetOptionHtml = `
                             <div class="option-row">
                                 <img src="${product.imgWhole}" class="option-thumb" alt="Whole Set">
                                 <div class="option-details">
-                                    <div class="option-title">🔥 Whole Set (${product.setCount} pcs)</div>
+                                    <div class="option-title">🔥 ${t.setBtn} (${product.setCount} pcs)</div>
                                     <div class="option-price">${formatPrice(product.wholeSetPrice)}</div>
                                 </div>
-                                <button class="action-btn btn-orange" onclick="orderWholeSet('${product.name}', ${product.wholeSetPrice}, ${product.setCount})">
-                                    Set / 端盒
+                                <button class="action-btn btn-orange" onclick="orderWholeSet('${pName}', ${product.wholeSetPrice}, ${product.setCount})">
+                                    ${t.setBtn}
                                 </button>
                             </div>
                         `;
@@ -323,20 +439,20 @@
 
                 card.innerHTML = `
                     <div style="height:100%; display:flex; flex-direction:column;">
-                        ${!product.inStock ? '<div class="sold-out-overlay">❌ Sold Out</div>' : ''}
+                        ${!product.inStock ? `<div class="sold-out-overlay">${t.soldOut}</div>` : ''}
                         <div class="carousel-wrapper">
                             <div class="carousel-scroll">${slidesHtml}</div>
-                            <div class="carousel-badge">Swipe ↔</div>
+                            <div class="carousel-badge">${t.swipe}</div>
                         </div>
                         <div class="product-header">
-                            <div class="product-name">${product.name}</div>
-                            <div class="product-desc">${product.desc}</div>
+                            <div class="product-name">${pName}</div>
+                            <div class="product-desc">${pDesc}</div>
                         </div>
                         <div class="options-container">
                             <div class="option-row">
                                 <img src="${product.imgSingle}" class="option-thumb" alt="Item">
                                 <div class="option-details">
-                                    <div class="option-title">${product.isCustom ? "Personalized Custom Video" : (product.isPlushie ? "Plushie Doll" : "Single Box (Random)")}</div>
+                                    <div class="option-title">${(product.isPlushie || product.isSocks) ? pName : t.singleBtn}</div>
                                     <div class="option-price" style="${product.isCustom ? 'color:#8338ec' : ''}">${priceDisplay}</div>
                                     <div class="qty-row">${qtyDisplay}</div>
                                 </div>
@@ -352,97 +468,175 @@
             });
         }
 
-        // --- 功能函数 ---
-        function orderCustomVideo(name) {
-            const message = `Hi Bubu Dudu Store, Custom Video! 🐻\n\nI am interested in:\n🎥 **${name}**\n\nI would like to request a quote for a custom video.`;
-            sendToWhatsapp(message);
+        // --- 弹窗逻辑 (重写，确保切换无误) ---
+        function openModal(type, imgUrl) {
+            currentProductType = type;
+            document.getElementById('productModal').style.display = 'flex';
+            document.getElementById('modalPreviewImg').src = imgUrl;
+            
+            // 重置
+            selectedOption1 = ""; selectedOption2 = ""; selectedPriceRM = 0;
+            document.getElementById('socksCustomInput').value = "";
+            document.getElementById('customPriceDisplay').innerText = "";
+            
+            // 清除旧的选中状态
+            const gridChar = document.getElementById('charGrid');
+            Array.from(gridChar.children).forEach(btn => btn.classList.remove('selected'));
+
+            updateModalContent();
+        }
+
+        // 核心：根据当前产品类型，重新填充内容
+        function updateModalContent() {
+            const t = translations[currentLang];
+            const gridSize = document.getElementById('sizeGrid');
+            const sectionChar = document.getElementById('sectionChar');
+            const sectionCustom = document.getElementById('customQtySection');
+            
+            document.getElementById('txt_modal_confirm').innerText = t.modalConfirm;
+            document.getElementById('txt_modal_title').innerText = t.modalTitle;
+
+            if (currentProductType === 'plushie') {
+                sectionChar.style.display = 'block'; 
+                sectionCustom.style.display = 'none';
+                document.getElementById('txt_modal_char').innerHTML = `${t.modalChar} <span style="color:red">*</span>`;
+                document.getElementById('txt_modal_size').innerHTML = `${t.modalSize} <span style="color:red">*</span>`;
+                
+                // 填充公仔尺寸
+                gridSize.innerHTML = `
+                    <div class="selection-btn size-btn" data-type="plushie" data-price-rm="25" onclick="selectOption('size', this, '25cm', 25)">25cm (${formatPrice(25)})</div>
+                    <div class="selection-btn size-btn" data-type="plushie" data-price-rm="40" onclick="selectOption('size', this, '35cm', 40)">35cm (${formatPrice(40)})</div>
+                    <div class="selection-btn size-btn" data-type="plushie" data-price-rm="60" onclick="selectOption('size', this, '45cm', 60)">45cm (${formatPrice(60)})</div>
+                    <div class="selection-btn size-btn" data-type="plushie" data-price-rm="90" onclick="selectOption('size', this, '60cm', 90)">60cm (${formatPrice(90)})</div>
+                `;
+                
+            } else if (currentProductType === 'socks') {
+                sectionChar.style.display = 'none'; 
+                sectionCustom.style.display = 'block';
+                document.getElementById('txt_modal_size').innerHTML = `${t.modalBundle} <span style="color:red">*</span>`;
+                document.getElementById('txt_custom_qty').innerText = t.customQty;
+                
+                // 填充袜子套餐
+                gridSize.innerHTML = `
+                    <div class="selection-btn size-btn" data-type="socks" data-price-rm="15" onclick="selectOption('size', this, '1 ${t.pairs}', 15)">1 ${t.pairs} (${formatPrice(15)})</div>
+                    <div class="selection-btn size-btn" data-type="socks" data-price-rm="28" onclick="selectOption('size', this, '3 ${t.pairs}', 28)">3 ${t.pairs} (${formatPrice(28)})</div>
+                    <div class="selection-btn size-btn" data-type="socks" style="grid-column: span 2;" data-price-rm="42" onclick="selectOption('size', this, '5 ${t.pairs} (${t.freeShip})', 42)">🔥 5 ${t.pairs} (${t.freeShip}) (${formatPrice(42)})</div>
+                `;
+            }
+        }
+
+        function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+
+        // 点击选项
+        function selectOption(group, element, value, priceOrUrl) {
+            const gridId = group === 'char' ? 'charGrid' : 'sizeGrid';
+            const btns = document.getElementById(gridId).children;
+            for(let btn of btns) { btn.classList.remove('selected'); }
+            element.classList.add('selected');
+
+            if(group === 'char') {
+                selectedOption1 = value;
+                if(priceOrUrl) document.getElementById('modalPreviewImg').src = priceOrUrl;
+            } else {
+                selectedOption2 = value; // 25cm or 3 Pairs
+                selectedPriceRM = priceOrUrl; // 25 or 28
+                
+                // 如果是袜子，并且点了上面的套餐，清空下面自定义输入
+                if(currentProductType === 'socks') {
+                    document.getElementById('socksCustomInput').value = "";
+                    document.getElementById('customPriceDisplay').innerText = "";
+                }
+                
+                // 公仔图片切换逻辑
+                if(currentProductType === 'plushie') {
+                    if(value.includes('25') || value.includes('35')) document.getElementById('modalPreviewImg').src = "https://i.postimg.cc/Bt13sqFj/Whats-App-Image-2026-02-01-at-12-41-31-PM.jpg";
+                    if(value.includes('45') || value.includes('60')) document.getElementById('modalPreviewImg').src = "https://i.postimg.cc/V0MPFR1P/Whats-App-Image-2026-02-01-at-12-41-31-PM-(1).jpg";
+                }
+            }
+        }
+
+        // 袜子自定义数量逻辑
+        function updateSocksCustomPrice() {
+            const qty = document.getElementById('socksCustomInput').value;
+            if(qty > 0) {
+                const price = qty * 15; 
+                document.getElementById('customPriceDisplay').innerText = formatPrice(price);
+                
+                // 取消上面的套餐选中
+                const btns = document.getElementById('sizeGrid').children;
+                for(let btn of btns) { btn.classList.remove('selected'); }
+                
+                const t = translations[currentLang];
+                selectedOption2 = `${t.customQty} ${qty}`;
+                selectedPriceRM = price;
+            } else {
+                document.getElementById('customPriceDisplay').innerText = "";
+            }
+        }
+
+        function confirmOrder() {
+            if(currentProductType === 'plushie') {
+                if(!selectedOption1 || !selectedOption2) { alert("Please select Character and Size!"); return; }
+            } else if(currentProductType === 'socks') {
+                if(!selectedOption2 && document.getElementById('socksCustomInput').value == "") { alert("Please select Quantity!"); return; }
+                selectedOption1 = "White (Default)"; 
+            }
+
+            let finalPriceRM = selectedPriceRM;
+            if(currentProductType === 'plushie' && selectedOption1.includes("Pair")) { 
+                finalPriceRM = selectedPriceRM * 2; 
+            }
+
+            const approxPrice = formatPrice(finalPriceRM);
+            let prodName = currentProductType === 'plushie' ? "Plushie Doll" : "Cotton Socks";
+            
+            const msg = `Hi Bubu Dudu Store! 🐻\nI want to order **${prodName}**:\n1. Option: ${selectedOption1}\n2. Spec: ${selectedOption2}\n💰 Price: RM ${finalPriceRM} (approx ${approxPrice})`;
+            
+            sendToWhatsapp(msg);
+            closeModal();
         }
 
         function orderSingle(name, priceRM, id) {
             const qtyInput = document.getElementById(`qty-${id}`);
             const quantity = qtyInput.value;
             const totalPriceRM = priceRM * quantity;
-            const totalPriceForeign = formatPrice(totalPriceRM);
-            const message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box! \n\nI want to order:\nItem: ${name}\nType: Single Box\nQty: ${quantity}\nTotal: RM ${totalPriceRM} (approx ${totalPriceForeign})\n\nIs this available?`;
-            sendToWhatsapp(message);
+            const approxPrice = formatPrice(totalPriceRM);
+            const msg = `Hi Bubu Dudu Store!\nI want to order:\nItem: ${name}\nQty: ${quantity}\nTotal: RM ${totalPriceRM} (approx ${approxPrice})`;
+            sendToWhatsapp(msg);
         }
 
         function orderWholeSet(name, setPriceRM, count) {
-            const setPriceForeign = formatPrice(setPriceRM);
-            const message = `Hi Bubu Dudu Store, Bubu Dudu Blind Box! \n\nI want to order:\nItem: ${name}\nType: 🔥 Whole Set (${count}pcs)\nPrice: RM ${setPriceRM} (approx ${setPriceForeign})\n\nIs this available?`;
-            sendToWhatsapp(message);
+            const approxPrice = formatPrice(setPriceRM);
+            const msg = `Hi Bubu Dudu Store!\nI want to order:\nItem: ${name}\nType: 🔥 Whole Set (${count}pcs)\nPrice: RM ${setPriceRM} (approx ${approxPrice})`;
+            sendToWhatsapp(msg);
         }
-
-        // --- 弹窗逻辑 ---
-        function openPlushieModal() {
-            document.getElementById('plushieModal').style.display = 'flex';
-            document.getElementById('modalPreviewImg').src = defaultPlushieImg; 
-            selectedCharacter = ""; selectedSize = ""; selectedPriceRM = 0;
-            updateSelectionUI('charGrid', null); updateSelectionUI('sizeGrid', null);
-            updateModalPrices(); 
-        }
-        function closeModal() { document.getElementById('plushieModal').style.display = 'none'; }
         
-        function updateModalPrices() {
-            const btns = document.querySelectorAll('.size-btn');
-            btns.forEach(btn => {
-                const basePrice = btn.getAttribute('data-price-rm');
-                const sizeLabel = btn.innerText.split('(')[0].trim(); 
-                if(sizeLabel.includes('cm')) {
-                     const pureSize = sizeLabel.replace(/[^0-9]cm/g, '').substring(0, 4); 
-                     btn.innerText = `${pureSize} (${formatPrice(basePrice)})`;
-                }
-            });
+        function orderCustomVideo(name) {
+            const msg = `Hi Bubu Dudu Store, Custom Video! 🐻\nI am interested in:\n🎥 **${name}**\nRequesting a quote.`;
+            sendToWhatsapp(msg);
         }
-
-        function selectChar(element, char, imgUrl) { 
-            selectedCharacter = char; 
-            updateSelectionUI('charGrid', element);
-            document.getElementById('modalPreviewImg').src = imgUrl;
-        }
-
-        function selectSize(element, size, priceRM, imgUrl) { 
-            selectedSize = size; 
-            selectedPriceRM = priceRM; 
-            updateSelectionUI('sizeGrid', element);
-            document.getElementById('modalPreviewImg').src = imgUrl;
-        }
-
-        function updateSelectionUI(gridId, activeElement) {
-            const btns = document.getElementById(gridId).children;
-            for(let btn of btns) { btn.classList.remove('selected'); }
-            if(activeElement) activeElement.classList.add('selected');
-        }
-
-        function confirmPlushieOrder() {
-            if(!selectedCharacter || !selectedSize) { alert("Please select both Character and Size! \n请选择款式和尺寸！"); return; }
-            let finalPriceRM = selectedPriceRM;
-            if(selectedCharacter.includes("Pair")) { finalPriceRM = selectedPriceRM * 2; }
-            const finalPriceForeign = formatPrice(finalPriceRM);
-            const message = `Hi Bubu Dudu Store! 🐻\n\nI want to order **Plushie Doll**:\n\n1. Character: ${selectedCharacter}\n2. Size: ${selectedSize}\n\n💰 Price: RM ${finalPriceRM} (approx ${finalPriceForeign})\n\nIs this available?`;
-            sendToWhatsapp(message);
-            closeModal();
-        }
-
-        window.onclick = function(event) { if (event.target == document.getElementById('plushieModal')) { closeModal(); } }
 
         function sendToWhatsapp(msg) {
             const encodedMsg = encodeURIComponent(msg);
-            const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${encodedMsg}`;
-            window.open(whatsappUrl, '_blank');
+            window.open(`https://wa.me/${myPhoneNumber}?text=${encodedMsg}`, '_blank');
         }
 
         searchInput.addEventListener('input', (e) => {
             const keyword = e.target.value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
+            const filtered = products.filter(p => {
+                const nameEn = p.name.en.toLowerCase();
+                const nameZh = p.name.zh.toLowerCase();
+                return nameEn.includes(keyword) || nameZh.includes(keyword);
+            });
             renderProducts(filtered);
         });
 
+        updateStaticText();
         renderProducts(products);
-        updateModalPrices();
     </script>
 </body>
 </html>
+
 
 
 
